@@ -19,5 +19,5 @@ interface FormRepositoryInterface
 	/**
 	 * Fetch form for specific url
 	 */
-	public function getForPath(string $path);
+	public function getForPath($path);
 }

@@ -18,9 +18,9 @@ class FormRepository implements FormRepositoryInterface
 		return $this->form->with('fields')->find($id);
 	}
 
-	public function getForPath(string $path)
+	public function getForPath($path)
 	{
-		return $htis->form->forPath($path)->with(['fields' => function($query) {
+		return $this->form->forPath($path)->with(['fields' => function($query) {
 			$query->orderBy('sorting');
 		}])->first();
 	}

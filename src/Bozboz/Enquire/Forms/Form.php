@@ -35,7 +35,7 @@ class Form extends Base implements FormInterface
 			$newPaths = array_filter(array_map('trim', explode("\n", \Input::get('page_list'))));
 			foreach ($newPaths as $pathString) {
 				$path = new Path([
-					'path' => str_replace(Request::root(), '', $pathString),
+					'path' => $form->cleanPath($pathString),
 					'form_id' => $form->id
 				]);
 				$path->save();
@@ -50,10 +50,15 @@ class Form extends Base implements FormInterface
 
 	public function scopeForPath($query, $path)
 	{
-		\Debugbar::info($path);
+		$path = $this->cleanPath($path);
 		$query->whereHas('paths', function($query) use ($path) {
-			$query->where('path', str_replace(Request::root(), '', $path));
+			$query->where('path', $path);
 		});
+	}
+
+	protected function cleanPath($path)
+	{
+		return '/'.preg_replace('(^/|^'.Request::root().'/)', '', $path);
 	}
 
 	public function getPageListAttribute()
