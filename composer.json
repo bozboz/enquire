@@ -1,0 +1,24 @@
+{
+    "name": "bozboz/enquire",
+    "description": "",
+    "authors": [
+        {
+            "name": "Jim Hollington",
+            "email": "jim@bozboz.co.uk"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations",
+            "src/controllers"
+        ],
+        "psr-4": {
+            "Bozboz\\Enquire\\": "src/Bozboz/Enquire"
+        }
+    },
+    "minimum-stability": "stable"
+}
