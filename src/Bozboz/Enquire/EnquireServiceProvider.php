@@ -4,6 +4,8 @@ namespace Bozboz\Enquire;
 
 use Bozboz\Enquire\Forms\Form;
 use Bozboz\Enquire\Forms\FormRepository;
+use Bozboz\Enquire\Forms\FormInterface;
+use Bozboz\Enquire\Forms\FormRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class EnquireServiceProvider extends ServiceProvider
