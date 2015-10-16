@@ -31,7 +31,5 @@ class EnquireServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$this->package('bozboz/enquire');
-
-		require __DIR__ . '/../../routes.php';
 	}
 }
