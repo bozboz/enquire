@@ -2,8 +2,9 @@
 
 ## Installation
 
-- `composer require bozboz/enquire <version>`
-- Add routes, eg.
+- Install package `composer require bozboz/enquire <version>`
+- Add service provider to provider array `'Bozboz\Enquire\EnquireServiceProvider',`
+- Add admin routes
 	```php
 	Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'before' => 'auth'], function()
 	{
@@ -16,10 +17,12 @@
 
 		Route::resource('enquiry-form-submissions', 'FormSubmissionAdminController');
 	});
-
+	```
+- Add front end route
+	```php
 	Route::post('process-enquiry', [
 		'as' => 'process-enquiry',
-		'uses' => 'MailchimpFormController@processSubmission'
+		'uses' => 'FormController@processSubmission'
 	]);
 	```
-
+    - Use `MailChimpFormController` if you intend to use MailChimp for news letter signup
