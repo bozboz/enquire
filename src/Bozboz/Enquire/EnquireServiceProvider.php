@@ -4,28 +4,14 @@ namespace Bozboz\Enquire;
 
 use Bozboz\Enquire\Forms\Form;
 use Bozboz\Enquire\Forms\FormRepository;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class EnquireServiceProvider extends ServiceProvider
 {
 	public function register()
 	{
-		App::bind('Bozboz\Enquire\Forms\FormInterface', Form::class);
-		App::bind('Bozboz\Enquire\Forms\FormRepositoryInterface', FormRepository::class);
-
-		View::composer('enquire::partials.form', function($view)
-		{
-			$form = Form::forPath(Request::url())->with(['fields' => function($query) {
-				$query->orderBy('sorting');
-			}])->first();
-
-			$view->with([
-				'form' => $form
-			]);
-		});
+		$this->app->bind(Forminterface::class, Form::class);
+		$this->app->bind(FormRepositoryInterface::class, FormRepository::class);
 	}
 
 	public function boot()
@@ -38,6 +24,15 @@ class EnquireServiceProvider extends ServiceProvider
 				'Forms' => route('admin.enquiry-forms.index'),
 				'Submissions' => route('admin.enquiry-form-submissions.index'),
 			];
+		});
+
+		// When the form partial is used, bind the form for the current request
+		// to it, if it exists.
+		$this->app['view']->composer('enquire::partials.form', function($view)
+		{
+			$view->with([
+				'form' => $this->app[FormRepositoryInterface::class]->getForCurrentPath()
+			]);
 		});
 	}
 }
