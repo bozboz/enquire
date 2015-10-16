@@ -3,7 +3,10 @@
 ## Installation
 
 - Install package `composer require bozboz/enquire <version>`
-- Add service provider to provider array `'Bozboz\Enquire\EnquireServiceProvider',`
+- Add service provider to provider array
+	```'php
+	Bozboz\Enquire\EnquireServiceProvider',
+	```
 - Add admin routes
 	```php
 	Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'before' => 'auth'], function()
@@ -26,3 +29,14 @@
 	]);
 	```
     - Use `MailChimpFormController` if you intend to use MailChimp for news letter signup
+- Add items to admin menu in site's AdminServiceProvider
+	```php
+	$menu['Enquiries'] = [
+	        'Forms' => route('admin.enquiry-forms.index'),
+	        'Submissions' => route('admin.enquiry-form-submissions.index'),
+	];
+	```
+- Include form partial in any view you want to be able to display forms
+	```
+	@include('enquire::partials.form')
+	```
