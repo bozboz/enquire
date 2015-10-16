@@ -7,29 +7,21 @@
 	```'php
 	Bozboz\Enquire\EnquireServiceProvider',
 	```
-- Add admin routes
-	```php
-	Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'before' => 'auth'], function()
-	{
-		Route::resource('enquiry-forms', 'FormAdminController');
-		Route::resource('enquiry-form-fields', 'FormFieldAdminController');
-		Route::get('enquiry-form-fields/{formId}/{fieldTypeAlias}/create', [
-			'as' => 'admin.enquiry-form-field.create',
-			'uses' => 'FormFieldAdminController@createForForm'
-		]);
-
-		Route::resource('enquiry-form-submissions', 'FormSubmissionAdminController');
-	});
-	```
-- Add front end route
-	```php
-	Route::post('process-enquiry', [
-		'as' => 'process-enquiry',
-		'uses' => 'FormController@processSubmission'
-	]);
-	```
-    - Use `MailChimpFormController` if you intend to use MailChimp for news letter signup
 - Include form partial in any view you want to be able to display forms
 	```
 	@include('enquire::partials.form')
 	```
+
+## Usage
+
+The default front end route doesn't support newsletter signup functionality due to not being able to anticipate
+implementation. There is a MailChimpFormController which contains a basic MailChimp signup implementation.
+
+To use this just override the package's frontend route with:
+
+```php
+Route::post('process-enquiry', [
+	'as' => 'process-enquiry',
+	'uses' => 'MailChimpFormController@processSubmission'
+]);
+```

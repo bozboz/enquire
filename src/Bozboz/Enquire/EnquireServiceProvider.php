@@ -32,6 +32,8 @@ class EnquireServiceProvider extends ServiceProvider
 	{
 		$this->package('bozboz/enquire');
 
+		require __DIR__ . '/../../routes.php';
+
 		$this->app['events']->listen('admin.renderMenu', function($menu)
 		{
 			$menu['Enquiries'] = [
