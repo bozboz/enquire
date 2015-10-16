@@ -31,5 +31,13 @@ class EnquireServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$this->package('bozboz/enquire');
+
+		$this->app['events']->listen('admin.renderMenu', function($menu)
+		{
+			$menu['Enquiries'] = [
+				'Forms' => route('admin.enquiry-forms.index'),
+				'Submissions' => route('admin.enquiry-form-submissions.index'),
+			];
+		});
 	}
 }
