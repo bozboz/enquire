@@ -20,7 +20,9 @@ class FormRepository implements FormRepositoryInterface
 
 	public function getForPath(string $path)
 	{
-		return $htis->form->forPath($path)->with('fields')->get();
+		return $htis->form->forPath($path)->with(['fields' => function($query) {
+			$query->orderBy('sorting');
+		}])->first();
 	}
 
 	public function getForCurrentPath()
