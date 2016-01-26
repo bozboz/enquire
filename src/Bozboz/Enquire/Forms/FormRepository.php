@@ -22,7 +22,7 @@ class FormRepository implements FormRepositoryInterface
 	{
 		return $this->form->forPath($path)->with(['fields' => function($query) {
 			$query->orderBy('sorting');
-		}])->first();
+		}])->get();
 	}
 
 	public function getForCurrentPath()

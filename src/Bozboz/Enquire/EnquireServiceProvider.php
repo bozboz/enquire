@@ -35,7 +35,7 @@ class EnquireServiceProvider extends ServiceProvider
 		$this->app['view']->composer('enquire::partials.form', function($view)
 		{
 			$view->with([
-				'form' => $this->app[FormRepositoryInterface::class]->getForCurrentPath()
+				'forms' => $this->app[FormRepositoryInterface::class]->getForCurrentPath()
 			]);
 		});
 	}
