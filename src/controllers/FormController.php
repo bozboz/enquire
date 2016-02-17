@@ -119,16 +119,16 @@ class FormController extends BaseController
 		]);
 		$submission->save();
 
+		$values = [];
 		foreach ($form->fields as $field) {
 			if (array_key_exists($field->name, $input)) {
-				$value = new Value([
-					'form_submission_id' => $submission->id,
+				$values[] = new Value([
 					'label' => $field->label,
 					'value' => $input[$field->name]
 				]);
-				$value->save();
 			}
 		}
+		$submission->values()->saveMany($values);
 	}
 
 	protected function getSuccessResponse(FormInterface $form)
