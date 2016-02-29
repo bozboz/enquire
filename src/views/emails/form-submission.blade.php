@@ -39,7 +39,7 @@
             <td>
                 @foreach ($form->fields as $field)
                     @if (array_key_exists($field->name, $input))
-                        <p style="{{ $font }}"><strong>{{{ $field->label }}}:</strong> {{{ nl2br(e($input[$field->name])) }}}</p>
+                        <p style="{{ $font }}"><strong>{{{ $field->label }}}:</strong> {{ nl2br(e($input[$field->name])) }}</p>
                     @endif
                 @endforeach
             </td>
