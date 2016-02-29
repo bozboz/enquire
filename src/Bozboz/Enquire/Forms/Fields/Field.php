@@ -37,7 +37,7 @@ class Field extends Base implements Sortable
 
 	public function getNameAttribute()
 	{
-		return trim('_', preg_replace('/[^\w]+/', '_', (strtolower($this->label))));
+		return trim(preg_replace('/[^\w]+/', '_', (strtolower($this->label))), '_');
 	}
 
 	public function getValidator()
