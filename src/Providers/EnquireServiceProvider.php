@@ -1,6 +1,6 @@
 <?php
 
-namespace Bozboz\Enquire;
+namespace Bozboz\Enquire\Providers;
 
 use Bozboz\Enquire\Forms\Form;
 use Bozboz\Enquire\Forms\FormRepository;
@@ -18,9 +18,16 @@ class EnquireServiceProvider extends ServiceProvider
 
 	public function boot()
 	{
-		$this->package('bozboz/enquire');
+        $packageRoot = __DIR__ . '/../..';
 
-		require __DIR__ . '/../../routes.php';
+		require "$packageRoot/src/Http/routes.php";
+
+		$this->loadViewsFrom("$packageRoot/resources/views", 'enquire');
+
+        $this->publishes([
+            "$packageRoot/database/migrations" => database_path('migrations'),
+            "$packageRoot/config/enquire.php" => config_path('enquire.php'),
+        ]);
 
 		$this->app['events']->listen('admin.renderMenu', function($menu)
 		{

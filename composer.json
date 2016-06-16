@@ -9,15 +9,14 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.2.*"
+        "illuminate/support": "5.2.*"
     },
     "autoload": {
         "classmap": [
-            "src/migrations",
-            "src/controllers"
+            "database/migrations"
         ],
         "psr-4": {
-            "Bozboz\\Enquire\\": "src/Bozboz/Enquire"
+            "Bozboz\\Enquire\\": "src"
         }
     },
     "minimum-stability": "stable"
