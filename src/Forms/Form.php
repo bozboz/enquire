@@ -51,9 +51,13 @@ class Form extends Model implements FormInterface
 	public function scopeForPath($query, $path)
 	{
 		$path = $this->cleanPath($path);
-		$query->whereHas('paths', function($query) use ($path) {
-			$query->where('path', $path);
-		});
+		$query->select('enquiry_forms.*')
+			->join(
+				'enquiry_form_paths',
+				'enquiry_form_paths.form_id', '=', 'enquiry_forms.id'
+			)->whereRaw(sprintf("'%s' like replace(`enquiry_form_paths`.`path`, '*', '%%')", $path))
+			->orderByRaw('length(`enquiry_form_paths`.`path`) desc')
+			->limit(1);
 	}
 
 	protected function cleanPath($path)
