@@ -51,6 +51,7 @@ class FormDecorator extends ModelAdminDecorator
 			new CheckboxField(['name' => 'newsletter_signup']),
 			new TextField(['name' => 'recipients']),
 			new TextareaField(['name' => 'page_list']),
+			new HTMLEditorField('description'),
 			new HTMLEditorField(['name' => 'confirmation_message'])
 		];
 	}

@@ -18,6 +18,7 @@ class CreateEnquiryFormsTable extends Migration {
 			$table->string('name', 500);
 			$table->boolean('newsletter_signup');
 			$table->string('recipients', 500)->nullable();
+			$table->text('description')->nullable();
 			$table->text('confirmation_message');
 			$table->boolean('status');
 			$table->timestamps();

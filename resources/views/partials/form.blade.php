@@ -1,20 +1,26 @@
 @if (isset($forms))
 	@foreach($forms as $form)
-		<div class="enquire-form" id="{{ $form->html_id }}"><!--
-		 --><div class="enquire-form__heading">{{ $form->name }}</div><!--
-
+		<div class="enquiry-form__form" id="{{ $form->html_id }}"><!--
 			@if (Session::has('success'))
-			 --><div class="enquire-form__confirmation">{!! $form->confirmation_message !!}</div><!--
+			 --><div class="enquiry-form__confirmation">{!! $form->confirmation_message !!}</div><!--
 			@else
+				@if ($form->description)
+				 --><div class="enquiry-form__description">
+						{!!$form->description!!}
+					</div><!--
+				@else
+				 --><div class="enquiry-form__heading">{{ $form->name }}</div><!--
+				@endif
+
 			 -->{{ Form::open(['route' => 'process-enquiry', 'files' => true]) }}<!--
 				 -->{{ Form::hidden('form_id', $form->id) }}<!--
 					@foreach ($form->fields as $field)
-					 --><div class="enquire-form__field">
+					 --><div class="enquiry-form__field">
 							@include($field->input_type)
 						</div><!--
 					@endforeach
-				 --><div class="enquire-form__field--submit">
-						{!! HTML::decode(Form::button('Submit <i class="fa fa-check"></i>', ['class' => 'btn', 'type' => 'submit'])) !!}
+				 --><div class="enquiry-form__submit">
+						{!! Form::button('Submit', ['class' => 'btn--small', 'type' => 'submit']) !!}
 					</div><!--
 			 -->{{ Form::close() }}<!--
 			@endif

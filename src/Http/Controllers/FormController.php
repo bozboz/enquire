@@ -11,6 +11,7 @@ use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 
@@ -34,7 +35,7 @@ class FormController extends Controller
 
 		if ($form) {
 
-			$validator = $this->validate($request, $this->getValidationRules($form));
+			$validator = $this->validate($request, $this->getValidationRules($form, $input));
 
 			$fileInputs = $form->getFileInputs();
 			if ($fileInputs) {
@@ -52,7 +53,7 @@ class FormController extends Controller
 
 			$this->logSubmission($form, $input);
 
-			$response = $this->getSuccessResponse($form);
+			$response = $this->getSuccessResponse($request, $form);
 		} else {
 			return abort(500);
 		}
@@ -60,19 +61,30 @@ class FormController extends Controller
 		return $response;
 	}
 
-	protected function getValidationRules(FormInterface $form)
+	protected function getValidationRules(FormInterface $form, $input)
 	{
 		$validationRules = [];
 		foreach ($form->fields as $field) {
+
 			$rules = [];
+
 			if ($field->required) {
 				$rules[] = 'required';
 			}
+
 			if ($field->validation) {
 				$rules[] = $field->validation;
 			}
+
 			if ($rules) {
 				$validationRules[$field->name] = implode('|', $rules);
+			}
+
+
+			if (is_array($input[$field->name])) {
+				foreach ($input[$field->name] as $name => $value) {
+					$validationRules["{$field->name}.{$name}"] = implode('|', $rules);
+				}
 			}
 		}
 		return $validationRules;
@@ -104,8 +116,11 @@ class FormController extends Controller
 
 	protected function sendMail($mailer, FormInterface $form, array $input, array $recipients)
 	{
-		$mailer->send($this->getEmailTemplate($form), ['form' => $form, 'input' => $input], function($message) use ($form, $recipients){
+		$mailer->send($this->getEmailTemplate($form), ['form' => $form, 'input' => $input], function($message) use ($form, $input, $recipients){
 			$message->subject($form->name.' form submission');
+			$message->from(
+				array_key_exists('email', $input) ? $input['email'] : Config::get('enquire.from_address')
+			);
 			foreach($recipients as $recipient) {
 				$message->to(trim($recipient));
 			}
@@ -127,7 +142,7 @@ class FormController extends Controller
 			if (array_key_exists($field->name, $input)) {
 				$value = new Value([
 					'label' => $field->label,
-					'value' => $input[$field->name]
+					'value' => implode(' ', (array)$input[$field->name])
 				]);
 				$value->submission()->associate($submission);
 				$value->save();
@@ -135,13 +150,24 @@ class FormController extends Controller
 		}
 	}
 
-	protected function getSuccessResponse(FormInterface $form)
+	protected function getSuccessResponse(Request $request, FormInterface $form)
 	{
-		return $this->getDefaultResponse($form)->withSuccess(true);
+		if ($request->ajax()) {
+			return $this->getAjaxResponse($form);
+		} else {
+			return $this->getDefaultResponse($form)->withSuccess(true);
+		}
 	}
 
 	protected function getDefaultResponse(FormInterface $form)
 	{
 		return Redirect::to(URL::previous($form) . '#'. $form->html_id);
+	}
+
+	protected function getAjaxResponse(FormInterface $form)
+	{
+		return [
+			'message' => $form->confirmation_message
+		];
 	}
 }

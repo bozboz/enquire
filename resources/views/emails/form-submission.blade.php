@@ -17,11 +17,6 @@
             line-height: 1.3;
         }
 
-        a {
-            color: #ff148b !important;
-            text-decoration: none !important;
-        }
-
         #emailContainer {
             width: 600px;
         }
@@ -39,7 +34,7 @@
             <td>
                 @foreach ($form->fields as $field)
                     @if (array_key_exists($field->name, $input))
-                        <p style="{{ $font }}"><strong>{{{ $field->label }}}:</strong> {{{ nl2br(e($input[$field->name])) }}}</p>
+                        <p style="{{ $font }}"><strong>{{{ $field->label }}}:</strong> {{{ nl2br(e(implode(' ', (array)$input[$field->name]))) }}}</p>
                     @endif
                 @endforeach
             </td>

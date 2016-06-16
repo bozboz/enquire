@@ -10,6 +10,5 @@ class FieldValidator extends Validator
 		'form_id' => 'required|exists:enquiry_forms,id',
 		'label' => 'required',
 		'input_type' => 'required',
-		'placeholder' => 'required'
 	];
 }

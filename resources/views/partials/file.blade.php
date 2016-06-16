@@ -6,4 +6,4 @@
 	{{ Form::file($field->name) }}
 </span>
 <span class="btn--file__selected js-selected-file"></span>
-{{ $errors->first($field->name, '<div class="form__error">:message</div>') }}
+{!! $errors->first($field->name, '<div class="form__error">:message</div>') !!}

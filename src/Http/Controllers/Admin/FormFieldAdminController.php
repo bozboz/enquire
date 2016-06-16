@@ -5,6 +5,7 @@ namespace Bozboz\Enquire\Http\Controllers\Admin;
 use Bozboz\Admin\Http\Controllers\ModelAdminController;
 use Bozboz\Admin\Reports\Actions\Permissions\IsValid;
 use Bozboz\Admin\Reports\Actions\Presenters\Link;
+use Bozboz\Admin\Reports\Actions\Presenters\Urls\Route;
 use Bozboz\Admin\Reports\Report;
 use Bozboz\Enquire\Forms\Fields\FieldDecorator;
 use Bozboz\Enquire\Forms\FormRepository;
@@ -60,8 +61,14 @@ class FormFieldAdminController extends ModelAdminController
 				'New Field',
 				'fa fa-plus',
 				['class' => 'btn-success'],
-				['class' => 'pull-right']
-			)
+				['class' => 'pull-right space-left']
+			),
+			$this->actions->custom(
+				new Link(new Route('admin.enquiry-forms.index'), 'Back to forms', 'fa fa-list-alt', [
+					'class' => 'btn-default pull-right',
+				]),
+				new IsValid([$this, 'canView'])
+			),
 		];
 	}
 
@@ -70,11 +77,11 @@ class FormFieldAdminController extends ModelAdminController
 	 */
 	protected function getSuccessResponse($instance)
 	{
-		return Redirect::action('\\' . static::class . '@index', ['form_id' => $instance->form_id]);
+		return Redirect::action('\\' . static::class . '@index', ['form' => $instance->form_id]);
 	}
 
 	protected function getListingUrl($instance)
 	{
-		return action('\\' . static::class . '@index', ['form_id' => $instance->form_id]);
+		return action('\\' . static::class . '@index', ['form' => $instance->form_id]);
 	}
 }

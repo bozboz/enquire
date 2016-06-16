@@ -43,6 +43,11 @@ class Field extends Model implements Sortable
 		return trim(preg_replace('/[^\w]+/', '_', (strtolower($this->label))), trim('_'));
 	}
 
+	protected function sortPrependOnCreate()
+	{
+		return false;
+	}
+
 	public function getValidator()
 	{
 		return new FieldValidator;

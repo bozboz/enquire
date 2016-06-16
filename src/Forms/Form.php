@@ -18,6 +18,7 @@ class Form extends Model implements FormInterface
 		'newsletter_signup',
 		'recipients',
 		'confirmation_message',
+		'description',
 		'status',
 		'page_list'
 	];
