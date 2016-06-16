@@ -1,61 +1,66 @@
 <?php
 
+namespace Bozboz\Enquire\Http\Controllers;
+
 use Bozboz\Enquire\Forms\FormException;
 use Bozboz\Enquire\Forms\FormInterface;
 use Bozboz\Enquire\Forms\FormRepositoryInterface;
 use Bozboz\Enquire\Submissions\Submission;
 use Bozboz\Enquire\Submissions\Value;
+use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
-class FormController extends BaseController
+class FormController extends Controller
 {
 	private $formRepository;
 	private $form;
+
+	use ValidatesRequests;
 
 	public function __construct(FormRepositoryInterface $formRepository)
 	{
 		$this->formRepository = $formRepository;
 	}
 
-	public function processSubmission()
+	public function processSubmission(Request $request, Mailer $mailer)
 	{
-		$input = Input::all();
+		$input = $request->all();
 
 		$form = $this->formRepository->find($input['form_id']);
 
 		if ($form) {
 
-			$validator = $this->validate($input, $form);
+			$validator = $this->validate($request, $this->getValidationRules($form));
 
-			if ($validator->passes()) {
-
-				$fileInputs = $form->getFileInputs();
-				if ($fileInputs) {
-					$input = $this->uploadFiles($form, $fileInputs, $input);
-				}
-
-				if ($form->newsletter_signup) {
-					$this->newsletterSignUp();
-				}
-
-				$recipients = array_filter(explode(',', $form->recipients));
-				if ($recipients) {
-					$this->sendMail($form, $input, $recipients);
-				}
-
-				$this->logSubmission($form, $input);
-
-				$response = $this->getSuccessResponse($form);
-			} else {
-				$response = $this->getFailureResponse($form, $validator->messages());
+			$fileInputs = $form->getFileInputs();
+			if ($fileInputs) {
+				$input = $this->uploadFiles($request, $form, $fileInputs, $input);
 			}
+
+			if ($form->newsletter_signup) {
+				$this->newsletterSignUp();
+			}
+
+			$recipients = array_filter(explode(',', $form->recipients));
+			if ($recipients) {
+				$this->sendMail($mailer, $form, $input, $recipients);
+			}
+
+			$this->logSubmission($form, $input);
+
+			$response = $this->getSuccessResponse($form);
 		} else {
-			$response = $this->getDefaultResponse($form);
+			return abort(500);
 		}
 
 		return $response;
 	}
 
-	protected function validate(array $input, FormInterface $form)
+	protected function getValidationRules(FormInterface $form)
 	{
 		$validationRules = [];
 		foreach ($form->fields as $field) {
@@ -70,7 +75,7 @@ class FormController extends BaseController
 				$validationRules[$field->name] = implode('|', $rules);
 			}
 		}
-		return Validator::make($input, $validationRules);
+		return $validationRules;
 	}
 
 	/**
@@ -81,11 +86,11 @@ class FormController extends BaseController
 		throw new FormException("Attempting to use newletter signup with no implementation", 1);
 	}
 
-	protected function uploadFiles(FormInterface $form, array $fields, array $input)
+	protected function uploadFiles($request, FormInterface $form, array $fields, array $input)
 	{
 		$formStorage = 'uploads/'.str_replace(' ', '', snake_case($form->name));
 		foreach ($fields as $field) {
-			$file = Input::file($field->name);
+			$file = $request->file($field->name);
 			if ($file) {
 				$filePath = "{$formStorage}/{$file->getFileName()}";
 				$file->move(public_path($filePath), $file->getClientOriginalName());
@@ -97,9 +102,9 @@ class FormController extends BaseController
 		return $input;
 	}
 
-	protected function sendMail(FormInterface $form, array $input, array $recipients)
+	protected function sendMail($mailer, FormInterface $form, array $input, array $recipients)
 	{
-		Mail::send($this->getEmailTemplate($form), ['form' => $form, 'input' => $input], function($message) use ($form, $recipients){
+		$mailer->send($this->getEmailTemplate($form), ['form' => $form, 'input' => $input], function($message) use ($form, $recipients){
 			$message->subject($form->name.' form submission');
 			foreach($recipients as $recipient) {
 				$message->to(trim($recipient));
@@ -114,18 +119,17 @@ class FormController extends BaseController
 
 	protected function logSubmission(FormInterface $form, array $input)
 	{
-		$submission = new Submission([
+		$submission = Submission::create([
 			'form_name' => $form->name
 		]);
-		$submission->save();
 
 		foreach ($form->fields as $field) {
 			if (array_key_exists($field->name, $input)) {
 				$value = new Value([
-					'form_submission_id' => $submission->id,
 					'label' => $field->label,
 					'value' => $input[$field->name]
 				]);
+				$value->submission()->associate($submission);
 				$value->save();
 			}
 		}
@@ -134,11 +138,6 @@ class FormController extends BaseController
 	protected function getSuccessResponse(FormInterface $form)
 	{
 		return $this->getDefaultResponse($form)->withSuccess(true);
-	}
-
-	protected function getFailureResponse(FormInterface $form, $errors)
-	{
-		return $this->getDefaultResponse($form)->withErrors($errors)->withInput();
 	}
 
 	protected function getDefaultResponse(FormInterface $form)

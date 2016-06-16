@@ -2,12 +2,15 @@
 
 namespace Bozboz\Enquire\Forms\Fields;
 
-use Bozboz\Admin\Models\Base;
-use Bozboz\Admin\Models\Sortable;
+use Bozboz\Admin\Base\Model;
+use Bozboz\Admin\Base\Sorting\Sortable;
+use Bozboz\Admin\Base\Sorting\SortableTrait;
 use Bozboz\Enquire\Forms\Form;
 
-class Field extends Base implements Sortable
+class Field extends Model implements Sortable
 {
+	use SortableTrait;
+
 	protected $table = 'enquiry_form_fields';
 
 	protected $fillable = [
@@ -37,7 +40,7 @@ class Field extends Base implements Sortable
 
 	public function getNameAttribute()
 	{
-		return trim('_', preg_replace('/[^\w]+/', '_', (strtolower($this->label))));
+		return trim(preg_replace('/[^\w]+/', '_', (strtolower($this->label))), trim('_'));
 	}
 
 	public function getValidator()

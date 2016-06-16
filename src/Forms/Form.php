@@ -2,14 +2,14 @@
 
 namespace Bozboz\Enquire\Forms;
 
-use Bozboz\Admin\Models\Base;
+use Bozboz\Admin\Base\Model;
 use Bozboz\Enquire\Forms\Fields\Field;
 use Bozboz\Enquire\Forms\FormInterface;
 use Bozboz\Enquire\Forms\Paths\Path;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
 
-class Form extends Base implements FormInterface
+class Form extends Model implements FormInterface
 {
 	protected $table = 'enquiry_forms';
 
@@ -64,7 +64,7 @@ class Form extends Base implements FormInterface
 	public function getPageListAttribute()
 	{
 		if ($this->paths) {
-			return implode("\n", $this->paths->lists('path'));
+			return $this->paths->pluck('path')->implode("\n");
 		}
 	}
 
@@ -79,7 +79,7 @@ class Form extends Base implements FormInterface
 	{
 		$fileInputs = [];
 		foreach ($this->fields as $field) {
-			if (array_search($field->input_type, Config::get('enquire::fields')) == 'file_upload') {
+			if (array_search($field->input_type, Config::get('enquire.fields')) == 'file_upload') {
 				$fileInputs[] = $field;
 			}
 		}

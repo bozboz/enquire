@@ -2,13 +2,13 @@
 
 namespace Bozboz\Enquire\Submissions;
 
-use DateTime, Link;
+use Bozboz\Admin\Base\ModelAdminDecorator;
+use Bozboz\Admin\Fields\BelongsToManyField;
+use Bozboz\Admin\Fields\CheckboxField;
+use Bozboz\Admin\Fields\HTMLEditorField;
 use Bozboz\Admin\Fields\TextField;
 use Bozboz\Admin\Fields\TextareaField;
-use Bozboz\Admin\Fields\HTMLEditorField;
-use Bozboz\Admin\Fields\CheckboxField;
-use Bozboz\Admin\Fields\BelongsToManyField;
-use Bozboz\Admin\Decorators\ModelAdminDecorator;
+use DateTime, Link;
 use Illuminate\Database\Eloquent\Builder;
 
 class SubmissionDecorator extends ModelAdminDecorator
@@ -28,7 +28,7 @@ class SubmissionDecorator extends ModelAdminDecorator
 		return [
 			'Form' => $instance->form_name,
 			'Date' => $instance->created_at,
-			'Preview' => str_limit(implode(', ', $instance->values->lists('value')))
+			'Content' => str_limit($instance->values->pluck('value')->implode(', '))
 		];
 	}
 
@@ -41,5 +41,10 @@ class SubmissionDecorator extends ModelAdminDecorator
 			$fields[] = new SubmissionValueField($value->label, $value->value);
 		}
 		return $fields;
+	}
+
+	public function modifyListingQuery(Builder $query)
+	{
+		$query->with('values')->orderBy('created_at', 'desc');
 	}
 }

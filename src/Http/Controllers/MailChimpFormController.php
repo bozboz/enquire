@@ -1,5 +1,7 @@
 <?php
 
+namespace Bozboz\Enquire\Http\Controllers;
+
 class MailchimpFormController extends FormController
 {
 	public function newsletterSignUp()

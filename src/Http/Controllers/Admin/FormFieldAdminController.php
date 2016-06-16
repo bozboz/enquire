@@ -1,13 +1,20 @@
-<?php namespace Admin;
+<?php
 
-use Bozboz\Admin\Controllers\ModelAdminController;
+namespace Bozboz\Enquire\Http\Controllers\Admin;
+
+use Bozboz\Admin\Http\Controllers\ModelAdminController;
+use Bozboz\Admin\Reports\Actions\Permissions\IsValid;
+use Bozboz\Admin\Reports\Actions\Presenters\Link;
 use Bozboz\Admin\Reports\Report;
 use Bozboz\Enquire\Forms\Fields\FieldDecorator;
 use Bozboz\Enquire\Forms\FormRepository;
-use Config, Input, Redirect;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
 
 class FormFieldAdminController extends ModelAdminController
 {
+	protected $useActions = true;
 	private $formRepository;
 
 	public function __construct(FieldDecorator $decorator, FormRepository $formRepository)
@@ -18,12 +25,10 @@ class FormFieldAdminController extends ModelAdminController
 
 	public function index()
 	{
-		if (!Input::get('form_id')) {
+		if ( ! Request::get('form')) {
 			return Redirect::route('admin.enquiry-forms.index');
 		}
-		$report = new Report($this->decorator);
-		$report->overrideView('enquire::admin.fields.overview');
-		return $report->render(array('controller' => get_class($this)));
+		return parent::index();
 	}
 
 	public function createForForm($formId, $fieldTypeAlias)
@@ -33,10 +38,31 @@ class FormFieldAdminController extends ModelAdminController
 		$form = $this->formRepository->find($formId);
 		$instance->form()->associate($form);
 
-		$type = Config::get("enquire::fields.{$fieldTypeAlias}");
+		$type = Config::get("enquire.fields.{$fieldTypeAlias}");
 		$instance->input_type = $type;
 
-		return $this->renderCreateFormFor($instance);
+		return $this->renderFormFor($instance, $this->createView, 'POST', 'store');
+	}
+
+	protected function getReportActions()
+	{
+		return [
+			$this->actions->dropdown(
+				collect(Config::get('enquire.fields'))->map(function($namespace, $fieldType) {
+					return $this->actions->custom(
+						new Link(
+							[$this->getActionName('createForForm'), [Request::get('form'), $fieldType]],
+							studly_case($fieldType)
+						),
+						new IsValid([$this, 'canCreate'])
+					);
+				}),
+				'New Field',
+				'fa fa-plus',
+				['class' => 'btn-success'],
+				['class' => 'pull-right']
+			)
+		];
 	}
 
 	/**
@@ -44,11 +70,11 @@ class FormFieldAdminController extends ModelAdminController
 	 */
 	protected function getSuccessResponse($instance)
 	{
-		return Redirect::action(get_class($this) . '@index', ['form_id' => $instance->form_id]);
+		return Redirect::action('\\' . static::class . '@index', ['form_id' => $instance->form_id]);
 	}
 
 	protected function getListingUrl($instance)
 	{
-		return action(get_class($this) . '@index', ['form_id' => $instance->form_id]);
+		return action('\\' . static::class . '@index', ['form_id' => $instance->form_id]);
 	}
 }

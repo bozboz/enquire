@@ -4,7 +4,7 @@
 		 --><div class="enquire-form__heading">{{ $form->name }}</div><!--
 
 			@if (Session::has('success'))
-			 --><div class="enquire-form__confirmation">{{ $form->confirmation_message }}</div><!--
+			 --><div class="enquire-form__confirmation">{!! $form->confirmation_message !!}</div><!--
 			@else
 			 -->{{ Form::open(['route' => 'process-enquiry', 'files' => true]) }}<!--
 				 -->{{ Form::hidden('form_id', $form->id) }}<!--
@@ -14,7 +14,7 @@
 						</div><!--
 					@endforeach
 				 --><div class="enquire-form__field--submit">
-						{{ HTML::decode(Form::button('Submit <i class="fa fa-check"></i>', ['class' => 'btn', 'type' => 'submit'])) }}
+						{!! HTML::decode(Form::button('Submit <i class="fa fa-check"></i>', ['class' => 'btn', 'type' => 'submit'])) !!}
 					</div><!--
 			 -->{{ Form::close() }}<!--
 			@endif

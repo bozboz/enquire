@@ -8,7 +8,7 @@ use Bozboz\Admin\Fields\TextareaField;
 use Bozboz\Admin\Fields\HTMLEditorField;
 use Bozboz\Admin\Fields\CheckboxField;
 use Bozboz\Admin\Fields\BelongsToManyField;
-use Bozboz\Admin\Decorators\ModelAdminDecorator;
+use Bozboz\Admin\Base\ModelAdminDecorator;
 use Illuminate\Database\Eloquent\Builder;
 
 class FormDecorator extends ModelAdminDecorator
@@ -40,12 +40,6 @@ class FormDecorator extends ModelAdminDecorator
 			'Pages' => implode('<br>', $page_list),
 			'Newsletter Signup' => $instance->newsletter_signup ? '<i class="fa fa-check"></i>' : '',
 			'Status' => $instance->getAttribute('status') == 1 ? 'Active' : 'Inactive',
-			'' => link_to_route(
-				'admin.enquiry-form-fields.index',
-				'Edit Fields',
-				['form_id' => $instance->id],
-				['class' => 'btn btn-default btn-sm', 'style' => 'float:right;']
-			)
 		];
 	}
 

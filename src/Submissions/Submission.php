@@ -2,10 +2,10 @@
 
 namespace Bozboz\Enquire\Submissions;
 
-use Bozboz\Admin\Models\Base;
+use Bozboz\Admin\Base\Model;
 use Bozboz\Enquire\Forms\FormValidator;
 
-class Submission extends Base
+class Submission extends Model
 {
 	protected $table = 'enquiry_submissions';
 

@@ -2,15 +2,17 @@
 
 namespace Bozboz\Enquire\Forms\Fields;
 
-use Bozboz\Admin\Decorators\ModelAdminDecorator;
+use Bozboz\Admin\Base\ModelAdminDecorator;
 use Bozboz\Admin\Fields\CheckboxField;
 use Bozboz\Admin\Fields\HiddenField;
 use Bozboz\Admin\Fields\TextField;
 use Bozboz\Admin\Fields\TextareaField;
 use Bozboz\Admin\Reports\Filters\ArrayListingFilter;
+use Bozboz\Admin\Reports\Filters\HiddenFilter;
+use Bozboz\Admin\Reports\Filters\RelationFilter;
 use Bozboz\Enquire\Forms\Form;
-use Config;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Config;
 
 class FieldDecorator extends ModelAdminDecorator
 {
@@ -26,7 +28,7 @@ class FieldDecorator extends ModelAdminDecorator
 
 	public function getColumns($instance)
 	{
-		$type = studly_case(array_search($instance->input_type, Config::get('enquire::fields')));
+		$type = studly_case(array_search($instance->input_type, Config::get('enquire.fields')));
 		return [
 			'Name' => $instance->label,
 			'Type' => $type,
@@ -36,13 +38,8 @@ class FieldDecorator extends ModelAdminDecorator
 
 	public function getListingFilters()
 	{
-		$formOptions = Form::orderBy('name')->lists('name', 'id');
-		$formIds = array_keys($formOptions);
-		$defaultForm = reset($formIds);
 		return [
-			new ArrayListingFilter('form_id', $formOptions, function($builder, $value) {
-				$builder->where('form_id', $value);
-			}, $defaultForm)
+			new HiddenFilter(new RelationFilter($this->model->form()))
 		];
 	}
 
