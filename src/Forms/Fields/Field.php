@@ -20,7 +20,8 @@ class Field extends Model implements Sortable
 		'placeholder',
 		'help_text',
 		'required',
-		'validation'
+		'validation',
+		'options'
 	];
 
 	protected $nullable = [

@@ -116,7 +116,7 @@ class FormController extends Controller
 
 	protected function sendMail($mailer, FormInterface $form, array $input, array $recipients)
 	{
-		$mailer->send($this->getEmailTemplate($form), ['form' => $form, 'input' => $input], function($message) use ($form, $input, $recipients){
+		$mailer->send($this->getEmailTemplate($form), compact('form', 'input'), function($message) use ($form, $input, $recipients){
 			$message->subject($form->name.' form submission');
 			$message->from(
 				array_key_exists('email', $input) ? $input['email'] : Config::get('enquire.from_address')

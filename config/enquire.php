@@ -8,5 +8,8 @@ return [
         'phone'       => 'enquire::partials.phone',
         'file_upload' => 'enquire::partials.file',
         'checkbox'    => 'enquire::partials.checkbox',
-    ]
+        'dropdown'    => 'enquire::partials.dropdown',
+    ],
+
+    'from_address' => 'noreply@finecut.co.uk',
 ];

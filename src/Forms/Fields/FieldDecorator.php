@@ -50,6 +50,9 @@ class FieldDecorator extends ModelAdminDecorator
 			new TextField(['name' => 'placeholder']),
 			new CheckboxField(['name' => 'required']),
 			new TextField(['name' => 'validation']),
+			($instance->input_type == 'enquire::partials.dropdown' ? new TextareaField('options', [
+				'help_text' => 'Enter options for the dropdown with a new line between each one'
+			]) : null),
 			new HiddenField(['name' => 'form_id']),
 			new HiddenField(['name' => 'input_type']),
 		];
