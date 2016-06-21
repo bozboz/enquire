@@ -49,10 +49,22 @@ class FormDecorator extends ModelAdminDecorator
 			new TextField(['name' => 'name']),
 			new CheckboxField(['name' => 'status']),
 			new CheckboxField(['name' => 'newsletter_signup']),
-			new TextField(['name' => 'recipients']),
-			new TextareaField(['name' => 'page_list']),
-			new HTMLEditorField('description'),
-			new HTMLEditorField(['name' => 'confirmation_message'])
+			new TextField([
+				'name' => 'recipients',
+				'help_text' => 'Comma separated list of email addresses you wish form submissions to be sent to.',
+			]),
+			new TextareaField([
+				'name' => 'page_list',
+				'help_text_title' => 'Paste all the URLs you wish this form to display on separated by a new line.',
+				'help_text' => "Wildcards maybe be added using an asterisk (*). eg. '/contact/*' would display on any page whos URL began with '/contact/'",
+			]),
+			new HTMLEditorField('description', [
+				'help_text' => 'This text will show above the form.',
+			]),
+			new HTMLEditorField([
+				'name' => 'confirmation_message',
+				'help_text' => 'This text will show when the form is submitted.',
+			])
 		];
 	}
 }
