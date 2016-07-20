@@ -2,7 +2,6 @@
 
 namespace Bozboz\Enquire\Forms;
 
-use DB;
 use Bozboz\Admin\Models\Base;
 use Bozboz\Enquire\Forms\Fields\Field;
 use Bozboz\Enquire\Forms\FormInterface;
