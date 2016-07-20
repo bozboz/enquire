@@ -42,4 +42,9 @@ class SubmissionDecorator extends ModelAdminDecorator
 		}
 		return $fields;
 	}
+
+	public function modifyListingQuery(Builder $query)
+	{
+		$query->with('form', 'values')->latest();
+	}
 }
