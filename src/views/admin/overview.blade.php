@@ -1,22 +1,5 @@
 @extends('admin::overview')
 
-@section('report_header')
-	@include('admin::partials.new')
-	<h1>Forms</h1>
-
-	@if (Session::has('model'))
-		@foreach(Session::get('model') as $msg)
-			<div id="js-alert" class="alert alert-success" data-alert="alert">
-				{{ $msg }}
-			</div>
-		@endforeach
-	@endif
-
-	@include('admin::partials.sort-alert')
-
-	{{ $report->getHeader() }}
-@stop
-
 @section('report')
 <div class="table-responsive">
 @if ($report->hasRows())
@@ -26,8 +9,8 @@
 		@if ($sortableClass)
 			<div class="faux-cell cell-small"></div>
 		@endif
-		@foreach ($report->getHeadings() as $heading)
-			<div class="faux-cell">{{ $heading }}</div>
+		@foreach ($report->getHeadings() as $columnHeading)
+			<div class="faux-cell">{{ $columnHeading }}</div>
 		@endforeach
 			<div class="no-wrap faux-cell"></div>
 		</li>
