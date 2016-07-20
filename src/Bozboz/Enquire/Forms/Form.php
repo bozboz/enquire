@@ -43,6 +43,11 @@ class Form extends Base implements FormInterface
 		});
 	}
 
+	public function submissions()
+	{
+		return $this->hasMany('Bozboz\Enquire\Submissions\Submission');
+	}
+
 	public function scopeActive($query)
 	{
 		$query->where('status', 1);

@@ -115,7 +115,8 @@ class FormController extends BaseController
 	protected function logSubmission(FormInterface $form, array $input)
 	{
 		$submission = new Submission([
-			'form_name' => $form->name
+			'form_name' => $form->name,
+			'form_id' => $form->id,
 		]);
 		$submission->save();
 

@@ -10,7 +10,8 @@ class Submission extends Base
 	protected $table = 'enquiry_submissions';
 
 	protected $fillable = [
-		'form_name'
+		'form_name',
+		'form_id',
 	];
 
 	public function values()
