@@ -10,6 +10,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'before' => 'auth'], 
 	]);
 
 	Route::resource('enquiry-form-submissions', 'FormSubmissionAdminController');
+
+	Route::model('form', 'Bozboz\\Enquire\\Forms\\Form');
+	Route::get('enquiry-forms/download/{form}', [
+		'as' => 'admin.enquiry-form.download.csv',
+		'uses' => 'FormAdminController@downloadCsv',
+	]);
 });
 
 Route::post('process-enquiry', [
