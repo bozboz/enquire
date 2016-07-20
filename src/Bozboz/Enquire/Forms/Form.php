@@ -43,6 +43,11 @@ class Form extends Base implements FormInterface
 		});
 	}
 
+	public function submissions()
+	{
+		return $this->hasMany('Bozboz\Enquire\Submissions\Submission');
+	}
+
 	public function scopeActive($query)
 	{
 		$query->where('status', 1);
@@ -100,4 +105,17 @@ class Form extends Base implements FormInterface
 	{
 		return new FormValidator;
 	}
+
+	public function getHistoricFormLabels()
+	{
+		return $this->submissions()
+			->distinct()
+			->join(
+				'enquiry_submission_values',
+				'enquiry_submission_values.submission_id', '=', 'enquiry_submissions.id'
+			)
+			->oldest('enquiry_submission_values.created_at')
+			->lists('label');
+	}
+
 }
