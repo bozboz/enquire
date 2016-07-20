@@ -110,7 +110,6 @@ class Form extends Base implements FormInterface
 	public function getHistoricFormLabels()
 	{
 		return $this->submissions()
-			->select('label')
 			->distinct()
 			->join(
 				'enquiry_submission_values',
