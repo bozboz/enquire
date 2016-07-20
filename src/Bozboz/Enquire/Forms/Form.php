@@ -109,12 +109,14 @@ class Form extends Base implements FormInterface
 
 	public function getHistoricFormLabels()
 	{
-		return DB::table('enquiry_submissions')
-			->select('enquiry_submission_values.label')
-			->join('enquiry_submission_values', 'enquiry_submission_values.submission_id', '=', 'enquiry_submissions.id')
-			->where('form_id', '=', $this->id)
-			->groupBy('label')
-			->orderBy('enquiry_submission_values.created_at', 'ASC')
+		return $this->submissions()
+			->select('label')
+			->distinct()
+			->join(
+				'enquiry_submission_values',
+				'enquiry_submission_values.submission_id', '=', 'enquiry_submissions.id'
+			)
+			->oldest('enquiry_submission_values.created_at')
 			->lists('label');
 	}
 
