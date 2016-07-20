@@ -2,6 +2,7 @@
 
 namespace Bozboz\Enquire\Forms;
 
+use DB;
 use Bozboz\Admin\Models\Base;
 use Bozboz\Enquire\Forms\Fields\Field;
 use Bozboz\Enquire\Forms\FormInterface;
@@ -105,4 +106,16 @@ class Form extends Base implements FormInterface
 	{
 		return new FormValidator;
 	}
+
+	public function getHistoricFormLabels()
+	{
+		return DB::table('enquiry_submissions')
+			->select('enquiry_submission_values.label')
+			->join('enquiry_submission_values', 'enquiry_submission_values.submission_id', '=', 'enquiry_submissions.id')
+			->where('form_id', '=', $this->id)
+			->groupBy('label')
+			->orderBy('enquiry_submission_values.created_at', 'ASC')
+			->lists('label');
+	}
+
 }
