@@ -22,6 +22,9 @@ class EnquireServiceProvider extends ServiceProvider
 
 		require "$packageRoot/src/Http/routes.php";
 
+		$permissions = $this->app['permission.handler'];
+		require "$packageRoot/src/permissions.php";
+
 		$this->loadViewsFrom("$packageRoot/resources/views", 'enquire');
 
         $this->publishes([
@@ -31,10 +34,12 @@ class EnquireServiceProvider extends ServiceProvider
 
 		$this->app['events']->listen('admin.renderMenu', function($menu)
 		{
-			$menu['Enquiries'] = [
-				'Forms' => route('admin.enquiry-forms.index'),
-				'Submissions' => route('admin.enquiry-form-submissions.index'),
-			];
+			if ($menu->gate('view_enquire_forms')) {
+				$menu['Enquiries'] = array_filter([
+					'Forms' => route('admin.enquiry-forms.index'),
+					'Submissions' => route('admin.enquiry-form-submissions.index'),
+				]);
+			}
 		});
 
 		// When the form partial is used, bind the form for the current request

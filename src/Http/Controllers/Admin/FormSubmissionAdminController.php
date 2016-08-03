@@ -50,4 +50,24 @@ class FormSubmissionAdminController extends ModelAdminController
 			),
 		];
 	}
+
+	public function viewPermissions($stack)
+	{
+		$stack->add('view_enquire_forms');
+	}
+
+	public function createPermissions($stack, $instance)
+	{
+		$stack->add('create_enquire_forms', $instance);
+	}
+
+	public function editPermissions($stack, $instance)
+	{
+		$stack->add('edit_enquire_forms', $instance);
+	}
+
+	public function deletePermissions($stack, $instance)
+	{
+		$stack->add('delete_enquire_forms', $instance);
+	}
 }
