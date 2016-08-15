@@ -2,6 +2,7 @@
 
 namespace Bozboz\Enquire\Http\Controllers;
 
+use Bozboz\Enquire\Events\SuccessfulFormSubmission;
 use Bozboz\Enquire\Forms\FormException;
 use Bozboz\Enquire\Forms\FormInterface;
 use Bozboz\Enquire\Forms\FormRepositoryInterface;
@@ -14,6 +15,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Event;
 
 class FormController extends Controller
 {
@@ -50,6 +52,8 @@ class FormController extends Controller
 			if ($recipients) {
 				$this->sendMail($mailer, $form, $input, $recipients);
 			}
+
+			Event::fire(new SuccessfulFormSubmission($form, $input, $recipients));
 
 			$this->logSubmission($form, $input);
 
