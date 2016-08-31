@@ -35,39 +35,42 @@ class FormController extends Controller
 
 		$form = $this->formRepository->find($input['form_id']);
 
-		if ($form) {
-
-			$validator = $this->validate($request, $this->getValidationRules($form, $input));
-
-			$fileInputs = $form->getFileInputs();
-			if ($fileInputs) {
-				$input = $this->uploadFiles($request, $form, $fileInputs, $input);
-			}
-
-			if ($form->newsletter_signup) {
-				$this->newsletterSignUp();
-			}
-
-			$recipients = array_filter(explode(',', $form->recipients));
-			if ($recipients) {
-				$this->sendMail($mailer, $form, $input, $recipients);
-			}
-
-			Event::fire(new SuccessfulFormSubmission($form, $input, $recipients));
-
-			$this->logSubmission($form, $input);
-
-			$response = $this->getSuccessResponse($request, $form);
-		} else {
-			return abort(500);
+		if ( ! $form) {
+			return abort(500, "Form {$input['form_id']} not found!");
 		}
+
+		$this->validate($request, $this->getValidationRules($form, $input));
+
+		$fileInputs = $form->getFileInputs();
+		if ($fileInputs) {
+			$input = $this->uploadFiles($request, $form, $fileInputs, $input);
+		}
+
+		if ($form->newsletter_signup) {
+			$this->newsletterSignUp();
+		}
+
+		$recipients = array_filter(explode(',', $form->recipients));
+		if ($recipients) {
+			$this->sendMail($mailer, $form, $input, $recipients);
+		}
+
+		Event::fire(new SuccessfulFormSubmission($form, $input, $recipients));
+
+		$this->logSubmission($form, $input);
+
+		$response = $this->getSuccessResponse($request, $form);
 
 		return $response;
 	}
 
 	protected function getValidationRules(FormInterface $form, $input)
 	{
-		$validationRules = [];
+		$validationRules = [
+			'my_name' => 'honeypot',
+			'my_time' => 'required|honeytime:5'
+		];
+
 		foreach ($form->fields as $field) {
 
 			$rules = [];

@@ -13,6 +13,7 @@
 				@endif
 
 			 -->{{ Form::open(['route' => 'process-enquiry', 'files' => true]) }}<!--
+				 -->{!! Honeypot::generate('my_name', 'my_time') !!}<!--
 				 -->{{ Form::hidden('form_id', $form->id) }}<!--
 					@foreach ($form->fields as $field)
 					 --><div class="enquiry-form__field">
