@@ -14,6 +14,10 @@ class EnquireServiceProvider extends ServiceProvider
 	{
 		$this->app->bind(Forminterface::class, Form::class);
 		$this->app->bind(FormRepositoryInterface::class, FormRepository::class);
+
+		// Register honeypot package dependency and alias
+		$this->app->register('Msurguy\Honeypot\HoneypotServiceProvider');
+		$this->app->alias('Honeypot', 'Msurguy\Honeypot\HoneypotFacade');
 	}
 
 	public function boot()
