@@ -3,9 +3,10 @@
 namespace Bozboz\Enquire\Providers;
 
 use Bozboz\Enquire\Forms\Form;
-use Bozboz\Enquire\Forms\FormRepository;
 use Bozboz\Enquire\Forms\FormInterface;
+use Bozboz\Enquire\Forms\FormRepository;
 use Bozboz\Enquire\Forms\FormRepositoryInterface;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
 class EnquireServiceProvider extends ServiceProvider
@@ -17,9 +18,7 @@ class EnquireServiceProvider extends ServiceProvider
 
 		// Register honeypot package dependency and alias
 		$this->app->register('Msurguy\Honeypot\HoneypotServiceProvider');
-
-		$loader = \Illuminate\Foundation\AliasLoader::getInstance();
-		$loader->alias('Honeypot', '\Msurguy\Honeypot\HoneypotFacade');
+		AliasLoader::getInstance()->alias('Honeypot', '\Msurguy\Honeypot\HoneypotFacade');
 	}
 
 	public function boot()

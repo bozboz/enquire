@@ -37,7 +37,7 @@ class FormController extends Controller
 
 		if ($form) {
 
-			$validator = $this->validate($request, $this->getValidationRules($form, $input));
+			$this->validate($request, $this->getValidationRules($form, $input));
 
 			$fileInputs = $form->getFileInputs();
 			if ($fileInputs) {
