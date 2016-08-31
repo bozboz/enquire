@@ -17,7 +17,9 @@ class EnquireServiceProvider extends ServiceProvider
 
 		// Register honeypot package dependency and alias
 		$this->app->register('Msurguy\Honeypot\HoneypotServiceProvider');
-		$this->app->alias('Honeypot', 'Msurguy\Honeypot\HoneypotFacade');
+
+		$loader = \Illuminate\Foundation\AliasLoader::getInstance();
+		$loader->alias('Honeypot', '\Msurguy\Honeypot\HoneypotFacade');
 	}
 
 	public function boot()
