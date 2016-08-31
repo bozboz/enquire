@@ -67,7 +67,11 @@ class FormController extends Controller
 
 	protected function getValidationRules(FormInterface $form, $input)
 	{
-		$validationRules = [];
+		$validationRules = [
+			'my_name' => 'honeypot',
+			'my_time' => 'required|honeytime:5'
+		];
+
 		foreach ($form->fields as $field) {
 
 			$rules = [];
