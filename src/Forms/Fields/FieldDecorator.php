@@ -3,6 +3,7 @@
 namespace Bozboz\Enquire\Forms\Fields;
 
 use Bozboz\Admin\Base\ModelAdminDecorator;
+use Bozboz\Admin\Fields\BelongsToManyField;
 use Bozboz\Admin\Fields\CheckboxField;
 use Bozboz\Admin\Fields\HiddenField;
 use Bozboz\Admin\Fields\TextField;
@@ -16,9 +17,12 @@ use Illuminate\Support\Facades\Config;
 
 class FieldDecorator extends ModelAdminDecorator
 {
-	public function __construct(Field $model)
+	private $rules;
+
+	public function __construct(Field $model, Validation\RuleDecorator $rules)
 	{
 		parent::__construct($model);
+		$this->rules = $rules;
 	}
 
 	public function getLabel($instance)
@@ -36,6 +40,13 @@ class FieldDecorator extends ModelAdminDecorator
 		];
 	}
 
+	public function getListRelations()
+	{
+		return [
+			'validationRules' => 'rule'
+		];
+	}
+
 	public function getListingFilters()
 	{
 		return [
@@ -49,7 +60,11 @@ class FieldDecorator extends ModelAdminDecorator
 			new TextField(['name' => 'label', 'label' => 'Name']),
 			new TextField(['name' => 'placeholder']),
 			new CheckboxField(['name' => 'required']),
-			new TextField(['name' => 'validation']),
+			new BelongsToManyField($this->rules, $instance->validationRules(), [
+				'key' => 'rule',
+				'data-tags' => 'true',
+				'help_text' => 'Enter validation rules for the field value',
+			]),
 			($instance->input_type == 'enquire::partials.dropdown' ? new TextareaField('options', [
 				'help_text' => 'Enter options for the dropdown with a new line between each one'
 			]) : null),

@@ -5,6 +5,7 @@ namespace Bozboz\Enquire\Forms\Fields;
 use Bozboz\Admin\Base\Model;
 use Bozboz\Admin\Base\Sorting\Sortable;
 use Bozboz\Admin\Base\Sorting\SortableTrait;
+use Bozboz\Enquire\Forms\Fields\Validation\Rule;
 use Bozboz\Enquire\Forms\Form;
 
 class Field extends Model implements Sortable
@@ -20,13 +21,11 @@ class Field extends Model implements Sortable
 		'placeholder',
 		'help_text',
 		'required',
-		'validation',
 		'options'
 	];
 
 	protected $nullable = [
 		'help_text',
-		'validation'
 	];
 
 	public function form()
@@ -47,6 +46,11 @@ class Field extends Model implements Sortable
 	protected function sortPrependOnCreate()
 	{
 		return false;
+	}
+
+	public function validationRules()
+	{
+		return $this->belongsToMany(Rule::class, 'enquiry_form_field_validation')->withTimestamps();
 	}
 
 	public function getValidator()

@@ -71,29 +71,30 @@ class FormController extends Controller
 			'my_time' => 'required|honeytime:5'
 		];
 
-		foreach ($form->fields as $field) {
+		$form->load('fields.validationRules');
 
-			$rules = [];
+		foreach ($form->fields as $field) {
+			$rules = collect();
 
 			if ($field->required) {
-				$rules[] = 'required';
+				$rules->push('required');
 			}
 
-			if ($field->validation) {
-				$rules[] = $field->validation;
-			}
+			$field->validationRules->each(function($validation) use ($rules) {
+				$rules->push($validation->rule);
+			});
 
-			if ($rules) {
-				$validationRules[$field->name] = implode('|', $rules);
-			}
-
-
-			if (is_array($input[$field->name])) {
-				foreach ($input[$field->name] as $name => $value) {
-					$validationRules["{$field->name}.{$name}"] = implode('|', $rules);
+			if ($rules->count()) {
+				if (is_array($input[$field->name])) {
+					foreach ($input[$field->name] as $name => $value) {
+						$validationRules["{$field->name}.{$name}"] = $rules->implode('|');
+					}
+				} else {
+					$validationRules[$field->name] = $rules->implode('|');
 				}
 			}
 		}
+
 		return $validationRules;
 	}
 
