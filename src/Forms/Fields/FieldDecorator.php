@@ -60,9 +60,8 @@ class FieldDecorator extends ModelAdminDecorator
 			new TextField(['name' => 'label', 'label' => 'Name']),
 			new TextField(['name' => 'placeholder']),
 			new CheckboxField(['name' => 'required']),
-			// new TextField(['name' => 'validation']),
 			new BelongsToManyField($this->rules, $instance->validationRules(), [
-				'key' => 'name',
+				'key' => 'rule',
 				'data-tags' => 'true',
 				'help_text' => 'Enter validation rules for the field value',
 			]),
