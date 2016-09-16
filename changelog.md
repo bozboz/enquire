@@ -1,5 +1,9 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.1.1 (2016-09-16)
+
+- Set up permissions properly for forms and fields
+
 ## Version 2.1.0 (2016-09-08)
 
 - Change validation on form fields from plain text to tag field
