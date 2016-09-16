@@ -39,11 +39,16 @@ class EnquireServiceProvider extends ServiceProvider
 
 		$this->app['events']->listen('admin.renderMenu', function($menu)
 		{
+			$links = [];
 			if ($menu->gate('view_enquire_forms')) {
-				$menu['Enquiries'] = array_filter([
-					'Forms' => route('admin.enquiry-forms.index'),
-					'Submissions' => route('admin.enquiry-form-submissions.index'),
-				]);
+				$links['Enquiry Forms'] = route('admin.enquiry-forms.index');
+			}
+			if ($menu->gate('view_enquire_submissions')) {
+				$links['Enquiry Submissions'] = route('admin.enquiry-form-submissions.index');
+			}
+
+			if ($links) {
+				$menu['Enquiries'] = $links;
 			}
 		});
 
