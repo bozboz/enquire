@@ -1,7 +1,7 @@
-{{ Form::label($field->name, $field->label, ['class' => 'sr-only']) }}
+{{ Form::label($field->name, $field->label.($field->required ? ' *' : ''), ['class' => 'sr-only']) }}
 {{ Form::text($field->name, null, array_filter([
     'class' => 'form__input',
-    'placeholder' => $field->placeholder.($field->required ? ' *' : ''),
+    'placeholder' => $field->placeholder,
     'required' => $field->required
 ])) }}
 {!! $errors->first($field->name, '<div class="form__error">:message</div>') !!}

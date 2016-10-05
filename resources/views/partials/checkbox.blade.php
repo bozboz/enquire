@@ -1,4 +1,4 @@
-{{ Form::label($field->name, $field->label) }}
+{{ Form::label($field->name, $field->label.($field->required ? ' *' : '')) }}
 {{ Form::hidden($field->name, 'No', ['id' => '']) }}
 {{ Form::checkbox($field->name, 'Yes', Input::get($field->name), array_filter([
     'class' => 'form__input',
