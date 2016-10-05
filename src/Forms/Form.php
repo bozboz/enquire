@@ -20,7 +20,8 @@ class Form extends Model implements FormInterface
 		'confirmation_message',
 		'description',
 		'status',
-		'page_list'
+		'page_list',
+		'list_id',
 	];
 
 	protected $nullable = [

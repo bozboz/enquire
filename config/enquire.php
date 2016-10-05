@@ -11,5 +11,7 @@ return [
         'dropdown'    => 'enquire::partials.dropdown',
     ],
 
-    'from_address' => 'noreply@finecut.co.uk',
+    'from_address' => '',
+
+    'mailchimp_api_key' => '',
 ];

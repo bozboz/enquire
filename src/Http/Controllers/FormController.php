@@ -19,19 +19,22 @@ use Event;
 
 class FormController extends Controller
 {
-	private $formRepository;
-	private $form;
+	protected $formRepository;
+	protected $mailer;
+	protected $request;
 
 	use ValidatesRequests;
 
-	public function __construct(FormRepositoryInterface $formRepository)
+	public function __construct(FormRepositoryInterface $formRepository, Mailer $mailer, Request $request)
 	{
 		$this->formRepository = $formRepository;
+		$this->mailer = $mailer;
+		$this->request = $request;
 	}
 
-	public function processSubmission(Request $request, Mailer $mailer)
+	public function processSubmission()
 	{
-		$input = $request->all();
+		$input = $this->request->all();
 
 		$form = $this->formRepository->find($input['form_id']);
 
@@ -39,27 +42,27 @@ class FormController extends Controller
 			return abort(500, "Form {$input['form_id']} not found!");
 		}
 
-		$this->validate($request, $this->getValidationRules($form, $input));
+		$this->validate($this->request, $this->getValidationRules($form, $input));
 
 		$fileInputs = $form->getFileInputs();
 		if ($fileInputs) {
-			$input = $this->uploadFiles($request, $form, $fileInputs, $input);
+			$input = $this->uploadFiles($this->request, $form, $fileInputs, $input);
 		}
 
 		if ($form->newsletter_signup) {
-			$this->newsletterSignUp();
+			$this->newsletterSignUp($form);
 		}
 
 		$recipients = array_filter(explode(',', $form->recipients));
 		if ($recipients) {
-			$this->sendMail($mailer, $form, $input, $recipients);
+			$this->sendMail($form, $input, $recipients);
 		}
 
 		Event::fire(new SuccessfulFormSubmission($form, $input, $recipients));
 
 		$this->logSubmission($form, $input);
 
-		$response = $this->getSuccessResponse($request, $form);
+		$response = $this->getSuccessResponse($form);
 
 		return $response;
 	}
@@ -101,16 +104,16 @@ class FormController extends Controller
 	/**
 	 * No default implementation
 	 */
-	protected function newsletterSignUp()
+	protected function newsletterSignUp($form)
 	{
 		throw new FormException("Attempting to use newletter signup with no implementation", 1);
 	}
 
-	protected function uploadFiles($request, FormInterface $form, array $fields, array $input)
+	protected function uploadFiles(FormInterface $form, array $fields, array $input)
 	{
 		$formStorage = 'uploads/'.str_replace(' ', '', snake_case($form->name));
 		foreach ($fields as $field) {
-			$file = $request->file($field->name);
+			$file = $this->request->file($field->name);
 			if ($file) {
 				$filePath = "{$formStorage}/{$file->getFileName()}";
 				$file->move(public_path($filePath), $file->getClientOriginalName());
@@ -122,9 +125,9 @@ class FormController extends Controller
 		return $input;
 	}
 
-	protected function sendMail($mailer, FormInterface $form, array $input, array $recipients)
+	protected function sendMail(FormInterface $form, array $input, array $recipients)
 	{
-		$mailer->send($this->getEmailTemplate($form), compact('form', 'input'), function($message) use ($form, $input, $recipients){
+		$this->mailer->send($this->getEmailTemplate($form), compact('form', 'input'), function($message) use ($form, $input, $recipients){
 			$message->subject($form->name.' form submission');
 			$message->from(
 				array_key_exists('email', $input) ? $input['email'] : Config::get('enquire.from_address')
@@ -158,9 +161,9 @@ class FormController extends Controller
 		}
 	}
 
-	protected function getSuccessResponse(Request $request, FormInterface $form)
+	protected function getSuccessResponse(FormInterface $form)
 	{
-		if ($request->ajax()) {
+		if ($this->request->ajax()) {
 			return $this->getAjaxResponse($form);
 		} else {
 			return $this->getDefaultResponse($form)->withSuccess(true);

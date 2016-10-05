@@ -33,8 +33,11 @@ class EnquireServiceProvider extends ServiceProvider
 
         $this->publishes([
             "$packageRoot/database/migrations" => database_path('migrations'),
-            "$packageRoot/config/enquire.php" => config_path('enquire.php'),
         ]);
+
+        $this->mergeConfigFrom(
+            "$packageRoot/config/enquire.php", 'enquire'
+        );
 
 		$this->app['events']->listen('admin.renderMenu', function($menu)
 		{

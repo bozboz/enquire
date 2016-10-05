@@ -49,6 +49,9 @@ class FormDecorator extends ModelAdminDecorator
 			new TextField(['name' => 'name']),
 			new CheckboxField(['name' => 'status']),
 			new CheckboxField(['name' => 'newsletter_signup']),
+			new TextField('list_id', [
+				'help_text' => 'This is required when setting up a newletter signup form. The ID can be found at the bottom of the setting page for the list in mailchimp.',
+			]),
 			new TextField([
 				'name' => 'recipients',
 				'help_text' => 'Comma separated list of email addresses you wish form submissions to be sent to.',

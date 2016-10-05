@@ -1,8 +1,8 @@
 # Bozboz Forms Package Changelog
 
-## Version 2.1.2
+## Version 2.2.0 (2016-10-05)
 
-- Fix form save
+- Set up mailchimp integration
 
 ## Version 2.1.1 (2016-09-16)
 
