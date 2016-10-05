@@ -27,8 +27,7 @@ class EnquireServiceProvider extends ServiceProvider
 
 		require "$packageRoot/src/Http/routes.php";
 
-		$permissions = $this->app['permission.handler'];
-		require "$packageRoot/src/permissions.php";
+		$this->definePermissions();
 
 		$this->loadViewsFrom("$packageRoot/resources/views", 'enquire');
 
@@ -60,5 +59,24 @@ class EnquireServiceProvider extends ServiceProvider
 				'forms' => $this->app[FormRepositoryInterface::class]->getForCurrentPath()
 			]);
 		});
+	}
+
+	private function definePermissions()
+	{
+		$permissions = $this->app['permission.handler'];
+		$permissions->define([
+
+		    'view_enquire_forms'   => 'Bozboz\Permissions\Rules\GlobalRule',
+		    'create_enquire_forms' => 'Bozboz\Permissions\Rules\ModelRule',
+		    'edit_enquire_forms'   => 'Bozboz\Permissions\Rules\ModelRule',
+		    'delete_enquire_forms' => 'Bozboz\Permissions\Rules\ModelRule',
+
+		    'view_enquire_submissions'   => 'Bozboz\Permissions\Rules\GlobalRule',
+		    'create_enquire_submissions' => 'Bozboz\Permissions\Rules\ModelRule',
+		    'edit_enquire_submissions'   => 'Bozboz\Permissions\Rules\ModelRule',
+		    'delete_enquire_submissions' => 'Bozboz\Permissions\Rules\ModelRule',
+
+		]);
+
 	}
 }
