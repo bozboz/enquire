@@ -1,5 +1,9 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.1.2
+
+- Fix form save
+
 ## Version 2.1.1 (2016-09-16)
 
 - Set up permissions properly for forms and fields
