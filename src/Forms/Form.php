@@ -33,7 +33,7 @@ class Form extends Model implements FormInterface
 			$form->paths->each(function($path) {
 				$path->delete();
 			});
-			$newPaths = array_filter(array_map('trim', explode("\n", \Input::get('page_list'))));
+			$newPaths = array_filter(array_map('trim', explode("\n", \Request::get('page_list'))));
 			foreach ($newPaths as $pathString) {
 				$path = new Path([
 					'path' => $form->cleanPath($pathString),
