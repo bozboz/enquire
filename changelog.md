@@ -1,5 +1,9 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.2.1 (2016-10-06)
+
+- Add partial for phone field type
+
 ## Version 2.2.0 (2016-10-05)
 
 - Set up mailchimp integration
