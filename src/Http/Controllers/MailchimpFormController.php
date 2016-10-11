@@ -2,9 +2,13 @@
 
 namespace Bozboz\Enquire\Http\Controllers;
 
+use Bozboz\Enquire\Exceptions\SignupException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Mailchimp;
+use Mailchimp_List_AlreadySubscribed;
+use Mailchimp_ValidationError;
+use Mailchimp_Error;
 
 class MailchimpFormController extends FormController
 {
@@ -19,6 +23,8 @@ class MailchimpFormController extends FormController
 				$this->getEmail(),
 				$this->getMergeVars()
 			);
+		} catch (Mailchimp_List_AlreadySubscribed $e) {
+			throw new SignupException($e->getMessage());
 		} catch(Mailchimp_ValidationError $e) {
 			$this->reportMailchimpError($e);
 		} catch (Mailchimp_Error $e) {

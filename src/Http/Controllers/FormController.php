@@ -3,19 +3,21 @@
 namespace Bozboz\Enquire\Http\Controllers;
 
 use Bozboz\Enquire\Events\SuccessfulFormSubmission;
+use Bozboz\Enquire\Exceptions\SignupException;
 use Bozboz\Enquire\Forms\FormException;
 use Bozboz\Enquire\Forms\FormInterface;
 use Bozboz\Enquire\Forms\FormRepositoryInterface;
 use Bozboz\Enquire\Submissions\Submission;
 use Bozboz\Enquire\Submissions\Value;
+use Event;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
-use Event;
 
 class FormController extends Controller
 {
@@ -50,7 +52,11 @@ class FormController extends Controller
 		}
 
 		if ($form->newsletter_signup) {
-			$this->newsletterSignUp($form);
+			try {
+				$this->newsletterSignUp($form);
+			} catch (SignupException $e) {
+				return $this->getFailResponse($form, $e->getMessage());
+			}
 		}
 
 		$recipients = array_filter(explode(',', $form->recipients));
@@ -164,9 +170,18 @@ class FormController extends Controller
 	protected function getSuccessResponse(FormInterface $form)
 	{
 		if ($this->request->ajax()) {
-			return $this->getAjaxResponse($form);
+			return $this->getAjaxResponse($form->confirmation_message);
 		} else {
 			return $this->getDefaultResponse($form)->withSuccess(true);
+		}
+	}
+
+	protected function getFailResponse(FormInterface $form, $message)
+	{
+		if ($this->request->ajax()) {
+			return $this->getAjaxFailResponse($message);
+		} else {
+			return $this->getDefaultResponse($form)->withErrors($message);
 		}
 	}
 
@@ -175,10 +190,17 @@ class FormController extends Controller
 		return Redirect::to(URL::previous($form) . '#'. $form->html_id);
 	}
 
-	protected function getAjaxResponse(FormInterface $form)
+	protected function getAjaxResponse($message)
 	{
 		return [
-			'message' => $form->confirmation_message
+			'message' => $message
 		];
+	}
+
+	protected function getAjaxFailResponse($error)
+	{
+		return Response::json([
+			'error' => $error
+		], 422);
 	}
 }

@@ -12,7 +12,7 @@
 				 --><div class="enquiry-form__heading">{{ $form->name }}</div><!--
 				@endif
 
-			 -->{{ Form::open(['route' => 'process-enquiry', 'files' => true]) }}<!--
+			 -->{{ Form::open(['route' => 'process-enquiry', 'files' => true, 'class' => 'js-form']) }}<!--
 				 -->{!! Honeypot::generate('my_name', 'my_time') !!}<!--
 				 -->{{ Form::hidden('form_id', $form->id) }}<!--
 					@foreach ($form->fields as $field)
