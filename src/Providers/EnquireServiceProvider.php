@@ -27,6 +27,7 @@ class EnquireServiceProvider extends ServiceProvider
 
 		require "$packageRoot/src/Http/routes.php";
 
+		$this->viewComposers();
 		$this->definePermissions();
 
 		$this->loadViewsFrom("$packageRoot/resources/views", 'enquire');
@@ -54,6 +55,10 @@ class EnquireServiceProvider extends ServiceProvider
 			}
 		});
 
+	}
+
+	protected function viewComposers()
+	{
 		// When the form partial is used, bind the form for the current request
 		// to it, if it exists.
 		$this->app['view']->composer('enquire::partials.form', function($view)
