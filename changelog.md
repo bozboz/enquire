@@ -1,5 +1,9 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.2.2 (2016-10-11)
+
+- Separate view composer in to its own method on service provider
+
 ## Version 2.2.1 (2016-10-06)
 
 - Add partial for phone field type
