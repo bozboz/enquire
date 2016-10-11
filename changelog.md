@@ -1,8 +1,9 @@
 # Bozboz Forms Package Changelog
 
-## Version 2.2.2 (2016-10-11)
+## Version 2.2.2 (future)
 
 - Separate view composer in to its own method on service provider
+- Send better failure messages and pass on info from mailchimp to user
 
 ## Version 2.2.1 (2016-10-06)
 
