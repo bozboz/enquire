@@ -1,7 +1,7 @@
 @if (isset($forms))
 	@foreach($forms as $form)
 		<div class="enquiry-form__form" id="{{ $form->html_id }}"><!--
-			@if (Session::has('success'))
+			@if ($form->wasSubmitted())
 			 --><div class="enquiry-form__confirmation">{!! $form->confirmation_message !!}</div><!--
 			@else
 				@if ($form->description)
