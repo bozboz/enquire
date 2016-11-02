@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.2.4 (2016-11-02)
+- Use correct blade escape syntax in email view
+
 ## Version 2.2.3 (2016-11-02)
 - Fix uploading of files
 - Prepend timestamp to uploaded files
