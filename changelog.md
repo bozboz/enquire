@@ -1,5 +1,9 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.2.3 (2016-11-02)
+- Fix uploading of files
+- Prepend timestamp to uploaded files
+
 ## Version 2.2.2 (2016-11-02)
 
 - Separate view composer in to its own method on service provider
