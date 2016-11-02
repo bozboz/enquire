@@ -48,7 +48,7 @@ class FormController extends Controller
 
 		$fileInputs = $form->getFileInputs();
 		if ($fileInputs) {
-			$input = $this->uploadFiles($this->request, $form, $fileInputs, $input);
+			$input = $this->uploadFiles($form, $fileInputs, $input);
 		}
 
 		if ($form->newsletter_signup) {
