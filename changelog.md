@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.2.5 (future)
+- Update success message so multiple forms can exist on a single page
+
 ## Version 2.2.4 (2016-11-02)
 - Use correct blade escape syntax in email view
 
