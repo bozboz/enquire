@@ -121,10 +121,9 @@ class FormController extends Controller
 		foreach ($fields as $field) {
 			$file = $this->request->file($field->name);
 			if ($file) {
-				$filePath = "{$formStorage}/{$file->getFileName()}";
-				$file->move(public_path($filePath), $file->getClientOriginalName());
-
-				$input[$field->name] = url("{$filePath}/{$file->getClientOriginalName()}");
+				$filename = time() . '-' . $file->getClientOriginalName();
+				$file->move(public_path($formStorage), $filename);
+				$input[$field->name] = url($formStorage . '/' . $filename);
 			}
 		}
 
