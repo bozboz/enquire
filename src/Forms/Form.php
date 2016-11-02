@@ -8,6 +8,7 @@ use Bozboz\Enquire\Forms\FormInterface;
 use Bozboz\Enquire\Forms\Paths\Path;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Session;
 
 class Form extends Model implements FormInterface
 {
@@ -43,6 +44,16 @@ class Form extends Model implements FormInterface
 				$path->save();
 			}
 		});
+	}
+
+	public function wasSubmitted()
+	{
+		return Session::get($this->getSessionHandle());
+	}
+
+	public function getSessionHandle()
+	{
+		return "form-" . e($this->name);
 	}
 
 	public function scopeActive($query)

@@ -168,7 +168,7 @@ class FormController extends Controller
 		if ($this->request->ajax()) {
 			return $this->getAjaxResponse($form->confirmation_message);
 		} else {
-			return $this->getDefaultResponse($form)->withSuccess(true);
+			return $this->getDefaultResponse($form)->with([$form->getSessionHandle() => true]);
 		}
 	}
 
