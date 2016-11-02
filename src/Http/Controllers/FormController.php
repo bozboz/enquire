@@ -135,9 +135,6 @@ class FormController extends Controller
 	{
 		$this->mailer->send($this->getEmailTemplate($form), compact('form', 'input'), function($message) use ($form, $input, $recipients){
 			$message->subject($form->name.' form submission');
-			$message->from(
-				array_key_exists('email', $input) ? $input['email'] : Config::get('enquire.from_address')
-			);
 			foreach($recipients as $recipient) {
 				$message->to(trim($recipient));
 			}

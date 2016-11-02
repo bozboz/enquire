@@ -1,9 +1,10 @@
 # Bozboz Forms Package Changelog
 
-## Version 2.2.2 (future)
+## Version 2.2.2 (2016-11-02)
 
 - Separate view composer in to its own method on service provider
 - Send better failure messages and pass on info from mailchimp to user
+- Use default site "from" address when sending email
 
 ## Version 2.2.1 (2016-10-06)
 
@@ -22,7 +23,7 @@
 - Change validation on form fields from plain text to tag field
     - Upgrading to this version requires publishing migrations
         ```php artisan vendor:publish --provider="Bozboz\Enquire\Providers\EnquireServiceProvider"```
-    
+
 
 ## Version 2.0.0 (2016-08-31)
 
