@@ -10,17 +10,30 @@ use Bozboz\Enquire\Forms\FormDecorator;
 
 class FormAdminController extends ModelAdminController
 {
+    private $submissions;
+
     protected $useActions = true;
 
-	public function __construct(FormDecorator $decorator)
+	public function __construct(FormDecorator $decorator, FormSubmissionAdminController $submissions)
 	{
 		parent::__construct($decorator);
+        $this->submissions = $submissions;
 	}
 
     protected function getRowActions()
     {
-
         return array_merge([
+            $this->actions->custom(
+                new Link(
+                    new Custom(function($instance) {
+                        return route('admin.enquiry-form-submissions.index', ['form' => $instance->id]);
+                    }),
+                    'Submissions',
+                    'fa fa-eye',
+                    ['class' => 'btn btn-primary btn-sm']
+                ),
+                new IsValid([$this->submissions, 'canView'])
+            ),
             $this->actions->custom(
                 new Link(
                     new Custom(function($instance) {

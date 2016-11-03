@@ -25,7 +25,9 @@ class FormDecorator extends ModelAdminDecorator
 
 	protected function modifyListingQuery(Builder $query)
 	{
-		$query->orderBy($this->model->getTable() . '.name');
+		$query->orderBy($this->model->getTable() . '.name')->with(['submissions' => function($query) {
+			$query->selectRaw('count(*) as count, form_id')->groupBy('form_id');
+		}]);
 	}
 
 	public function getColumns($instance)
@@ -39,7 +41,8 @@ class FormDecorator extends ModelAdminDecorator
 			'Recipients' => $instance->recipients,
 			'Pages' => implode('<br>', $page_list),
 			'Newsletter Signup' => $instance->newsletter_signup ? '<i class="fa fa-check"></i>' : '',
-			'Status' => $instance->getAttribute('status') == 1 ? 'Active' : 'Inactive',
+			'Status' => $instance->getAttribute('status') == 1 ? '<i class="fa fa-check"></i>' : '',
+			'Submissions' => $instance->submissions->first()->count,
 		];
 	}
 

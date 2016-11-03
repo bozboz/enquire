@@ -16,6 +16,15 @@ class SubmissionValueField extends TextField
 
 	public function getInput()
 	{
-		return $this->value;
+		return $this->generateLinks($this->value);
 	}
+
+    protected function generateLinks($value)
+    {
+        return preg_replace(
+            '/((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?)/',
+            '<a href="$1" target="_blank">$1</a>',
+            $value
+        );
+    }
 }

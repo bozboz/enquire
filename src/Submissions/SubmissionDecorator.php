@@ -8,14 +8,28 @@ use Bozboz\Admin\Fields\CheckboxField;
 use Bozboz\Admin\Fields\HTMLEditorField;
 use Bozboz\Admin\Fields\TextField;
 use Bozboz\Admin\Fields\TextareaField;
+use Bozboz\Admin\Reports\Filters\ArrayListingFilter;
+use Bozboz\Admin\Reports\Filters\RelationFilter;
+use Bozboz\Enquire\Forms\Form;
+use Bozboz\Enquire\Forms\FormDecorator;
 use DateTime, Link;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Request;
 
 class SubmissionDecorator extends ModelAdminDecorator
 {
-	public function __construct(Submission $model)
+	private $forms;
+
+	public function __construct(Submission $model, FormDecorator $forms)
 	{
 		parent::__construct($model);
+		$this->forms = $forms;
+	}
+
+	public function getHeading($plural = false)
+	{
+		$heading = Form::whereId(Request::get('form'))->value('name') . ' Submission';
+		return str_plural($heading, $plural ? 2 : 1);
 	}
 
 	public function getLabel($instance)
@@ -27,7 +41,7 @@ class SubmissionDecorator extends ModelAdminDecorator
 	{
 		return [
 			'Form' => $instance->form_name,
-			'Date' => $instance->created_at,
+			'Date' => $instance->created_at->format('d M Y - H:i'),
 			'Content' => str_limit($instance->values->pluck('value')->implode(', '))
 		];
 	}
@@ -46,5 +60,12 @@ class SubmissionDecorator extends ModelAdminDecorator
 	public function modifyListingQuery(Builder $query)
 	{
 		$query->with('values')->orderBy('created_at', 'desc');
+	}
+
+	public function getListingFilters()
+	{
+		return [
+			new RelationFilter($this->model->form(), $this->forms),
+		];
 	}
 }

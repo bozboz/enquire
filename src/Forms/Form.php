@@ -6,6 +6,7 @@ use Bozboz\Admin\Base\Model;
 use Bozboz\Enquire\Forms\Fields\Field;
 use Bozboz\Enquire\Forms\FormInterface;
 use Bozboz\Enquire\Forms\Paths\Path;
+use Bozboz\Enquire\Submissions\Submission;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -44,6 +45,11 @@ class Form extends Model implements FormInterface
 				$path->save();
 			}
 		});
+	}
+
+	public function submissions()
+	{
+		return $this->hasMany(Submission::class);
 	}
 
 	public function wasSubmitted()
