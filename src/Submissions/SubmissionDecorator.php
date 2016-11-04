@@ -44,7 +44,7 @@ class SubmissionDecorator extends ModelAdminDecorator implements Downloadable
 		return [
 			'Form' => $instance->form_name,
 			'Date' => $instance->created_at->format('d M Y - H:i'),
-			'Content' => str_limit($instance->values->pluck('value')->implode(', '))
+			'Content' => e(str_limit($instance->values->pluck('value')->implode(', ')))
 		];
 	}
 

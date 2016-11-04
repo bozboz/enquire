@@ -16,7 +16,7 @@ class SubmissionValueField extends TextField
 
 	public function getInput()
 	{
-		return $this->generateLinks($this->value);
+		return nl2br($this->generateLinks(e($this->value)));
 	}
 
     protected function generateLinks($value)
