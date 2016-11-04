@@ -74,7 +74,7 @@ class FormAdminController extends ModelAdminController
 
         $report = new CSVReport($form);
 
-        return $report->render();
+        return $report->render(['filename' => str_slug($form->name) . '-report-' . date('Y-m-d') . '.csv',]);
     }
 
     public function canReport()
