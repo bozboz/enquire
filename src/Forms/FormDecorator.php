@@ -26,25 +26,25 @@ class FormDecorator extends ModelAdminDecorator
 	protected function modifyListingQuery(Builder $query)
 	{
 		$query->orderBy($this->model->getTable() . '.name')->with(['submissions' => function($query) {
-			$query->selectRaw('count(*) as count, max(created_at) as last_submission, form_id')->groupBy('form_id');
+			$query->selectRaw('count(*) as count, max(created_at) as latest_submission, form_id')->groupBy('form_id');
 		}]);
 	}
 
 	public function getColumns($instance)
 	{
-		$page_list = [];
-		foreach ($instance->paths as $page) {
-			$page_list[] = link_to($page->path, $page->path, ['target' => '_blank']);
-		}
+		$pageList = $instance->paths->map(function($page) {
+			return (string)link_to($page->path, $page->path, ['target' => '_blank']);
+		});
+		$submissionStats = $instance->submissions->first();
 		return [
 			'Name' => $instance->name,
 			'Recipients' => $instance->recipients,
-			'Pages' => implode('<br>', $page_list),
+			'Pages' => $pageList->implode('<br>'),
 			'Newsletter Signup' => $instance->newsletter_signup ? '<i class="fa fa-check"></i>' : '',
 			'Status' => $instance->getAttribute('status') == 1 ? '<i class="fa fa-check"></i>' : '',
-			'Submissions' => $instance->submissions->first()->count,
-			'Last Submission' => $instance->submissions->first()->last_submission ?
-				date('d M Y - H:i', strtotime($instance->submissions->first()->last_submission)) : '-',
+			'Submissions' => $submissionStats->count,
+			'Latest Submission' => $submissionStats->latest_submission ?
+				date('d M Y - H:i', strtotime($submissionStats->latest_submission)) : '-',
 		];
 	}
 
