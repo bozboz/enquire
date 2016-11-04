@@ -157,7 +157,7 @@ class FormController extends Controller
 			if (array_key_exists($field->name, $input)) {
 				$value = new Value([
 					'label' => $field->label,
-					'value' => implode(', ', (array)$input[$field->name])
+					'value' => trim(implode(', ', (array)$input[$field->name]))
 				]);
 				$value->submission()->associate($submission);
 				$value->save();
