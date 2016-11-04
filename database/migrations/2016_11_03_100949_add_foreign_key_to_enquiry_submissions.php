@@ -23,10 +23,6 @@ class AddForeignKeyToEnquirySubmissions extends Migration
             SET enquiry_submissions.form_id = enquiry_forms.id
             WHERE enquiry_submissions.form_name = enquiry_forms.name
         ');
-
-        Schema::table('enquiry_submissions', function (Blueprint $table) {
-            $table->dropColumn('form_name');
-        });
     }
 
     /**
@@ -36,10 +32,6 @@ class AddForeignKeyToEnquirySubmissions extends Migration
      */
     public function down()
     {
-        Schema::table('enquiry_submissions', function (Blueprint $table) {
-            $table->string('form_name')->after('form_id');
-        });
-
         DB::statement('
             UPDATE enquiry_submissions, enquiry_forms
             SET enquiry_submissions.form_name = enquiry_forms.name

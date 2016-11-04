@@ -19,6 +19,8 @@ class CreateEnquirySubmissionValuesTable extends Migration {
 			$table->string('label');
 			$table->text('value');
 			$table->timestamps();
+
+			$table->foreign('submission_id')->references('id')->on('enquiry_submissions')->onDelete('cascade');
 		});
 	}
 

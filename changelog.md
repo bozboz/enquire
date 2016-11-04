@@ -1,7 +1,10 @@
 # Bozboz Forms Package Changelog
 
-## Version 2.2.5 (future)
+## Version 2.3.0 (future)
 - Update success message so multiple forms can exist on a single page
+- Link submissions to forms with a foreign key
+- Add form filter to submissions report
+- Add reporting
 
 ## Version 2.2.4 (2016-11-02)
 - Use correct blade escape syntax in email view

@@ -8,7 +8,9 @@ use Bozboz\Admin\Fields\CheckboxField;
 use Bozboz\Admin\Fields\HTMLEditorField;
 use Bozboz\Admin\Fields\TextField;
 use Bozboz\Admin\Fields\TextareaField;
+use Bozboz\Admin\Reports\Downloadable;
 use Bozboz\Admin\Reports\Filters\ArrayListingFilter;
+use Bozboz\Admin\Reports\Filters\DateFilter;
 use Bozboz\Admin\Reports\Filters\RelationFilter;
 use Bozboz\Enquire\Forms\Form;
 use Bozboz\Enquire\Forms\FormDecorator;
@@ -16,7 +18,7 @@ use DateTime, Link;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
 
-class SubmissionDecorator extends ModelAdminDecorator
+class SubmissionDecorator extends ModelAdminDecorator implements Downloadable
 {
 	private $forms;
 
@@ -66,6 +68,45 @@ class SubmissionDecorator extends ModelAdminDecorator
 	{
 		return [
 			new RelationFilter($this->model->form(), $this->forms),
+			new DateFilter('created_at'),
 		];
+	}
+
+	public function getColumnsForCSV($instance)
+	{
+		if ( ! Request::get('form')) {
+			return [
+				'Form' => $instance->form_name,
+				'Date' => $instance->created_at->format('d M Y - H:i'),
+				'Content' => $instance->values->pluck('value')->implode(', ')
+			];
+		}
+
+		$keys = $this->getColumnKeys($instance);
+		$columns = collect([
+			'Form' => $instance->form_name,
+			'Date' => $instance->created_at->format('d M Y - H:i'),
+		]);
+
+		$columns = $columns->merge($instance->values->pluck('value', 'label'));
+
+		$columns = array_merge($keys, $columns->all());
+
+		return $columns;
+	}
+
+	private function getColumnKeys($instance)
+	{
+		static $keys;
+
+		if ( ! $keys) {
+			$keys = $instance->form->submissions()
+				->join('enquiry_submission_values', 'enquiry_submission_values.submission_id', '=', 'enquiry_submissions.id')
+				->groupBy('enquiry_submission_values.label')
+				->pluck('enquiry_submission_values.label')
+				->all();
+		}
+
+		return $keys;
 	}
 }

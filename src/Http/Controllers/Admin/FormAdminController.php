@@ -6,7 +6,10 @@ use Bozboz\Admin\Http\Controllers\ModelAdminController;
 use Bozboz\Admin\Reports\Actions\Permissions\IsValid;
 use Bozboz\Admin\Reports\Actions\Presenters\Link;
 use Bozboz\Admin\Reports\Actions\Presenters\Urls\Custom;
+use Bozboz\Enquire\Forms\CSVReport;
+use Bozboz\Enquire\Forms\Form;
 use Bozboz\Enquire\Forms\FormDecorator;
+use Bozboz\Enquire\Forms\FormInterface;
 
 class FormAdminController extends ModelAdminController
 {
@@ -23,16 +26,31 @@ class FormAdminController extends ModelAdminController
     protected function getRowActions()
     {
         return array_merge([
-            $this->actions->custom(
-                new Link(
-                    new Custom(function($instance) {
-                        return route('admin.enquiry-form-submissions.index', ['form' => $instance->id]);
-                    }),
-                    'Submissions',
-                    'fa fa-eye',
-                    ['class' => 'btn btn-primary btn-sm']
-                ),
-                new IsValid([$this->submissions, 'canView'])
+            $this->actions->dropdown(
+                [
+                    $this->actions->custom(
+                        new Link(
+                            new Custom(function($instance) {
+                                return route('admin.enquiry-form-submissions.index', ['form' => $instance->id]);
+                            }),
+                            'View',
+                            'fa fa-eye'
+                        ),
+                        new IsValid([$this->submissions, 'canView'])
+                    ),
+                    $this->actions->custom(
+                        new Link(
+                            new Custom(function($instance) {
+                                return route('admin.enquiry-forms.download-report', ['form' => $instance->id]);
+                            }),
+                            'Download Report',
+                            'fa fa-download'
+                        ),
+                        new IsValid([$this, 'canReport'])
+                    )
+                ], 'Submissions', 'fa fa-list', [
+                    'class' => 'btn-default btn-sm',
+                ]
             ),
             $this->actions->custom(
                 new Link(
@@ -46,6 +64,22 @@ class FormAdminController extends ModelAdminController
                 new IsValid([$this, 'canEdit'])
             ),
         ], parent::getRowActions());
+    }
+
+    public function downloadReport(Form $form)
+    {
+        if ( ! $this->canReport()) {
+            return abort(403);
+        }
+
+        $report = new CSVReport($form);
+
+        return $report->render();
+    }
+
+    public function canReport()
+    {
+        return $this->submissions->canView();
     }
 
     protected function createPermissions($stack, $instance)

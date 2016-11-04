@@ -147,9 +147,11 @@ class FormController extends Controller
 
 	protected function logSubmission(FormInterface $form, array $input)
 	{
-		$submission = new Submission;
+		$submission = new Submission([
+			'form_name' => $form->name
+		]);
 		$submission->form()->associate($form);
-		$form->save();
+		$submission->save();
 
 		foreach ($form->fields as $field) {
 			if (array_key_exists($field->name, $input)) {

@@ -98,6 +98,22 @@ class Form extends Model implements FormInterface
 		return str_replace(' ', '', snake_case($this->name));
 	}
 
+	/**
+	 * Get an array containing all form labels that have been
+	 * associated with this form.
+	 *
+	 * @return string[] historic form labels
+	 */
+	public function getHistoricFormLabels()
+	{
+		return $this->submissions()
+			->select('enquiry_submission_values.label')
+			->join('enquiry_submission_values', 'enquiry_submission_values.submission_id', '=', 'enquiry_submissions.id')
+			->groupBy('label')
+			->orderBy('enquiry_submission_values.created_at', 'ASC')
+			->pluck('label')->all();
+	}
+
 	public function getFileInputs()
 	{
 		$fileInputs = [];
