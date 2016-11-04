@@ -86,6 +86,10 @@ class FormSubmissionAdminController extends ModelAdminController
 
 	public function downloadReport()
 	{
+        if ( ! $this->canReport()) {
+            return abort(403);
+        }
+
 		$report = new CSVReport($this->decorator);
 		return $report->render([
 			'filename' => 'enquiry-report-' . date('Y-m-d') . '.csv',
