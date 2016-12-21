@@ -42,8 +42,8 @@ class FormDecorator extends ModelAdminDecorator
 			'Pages' => $pageList->implode('<br>'),
 			'Newsletter Signup' => $instance->newsletter_signup ? '<i class="fa fa-check"></i>' : '',
 			'Status' => $instance->getAttribute('status') == 1 ? '<i class="fa fa-check"></i>' : '',
-			'Submissions' => $submissionStats->count,
-			'Latest Submission' => $submissionStats->latest_submission ?
+			'Submissions' => $submissionStats ? $submissionStats->count : 0,
+			'Latest Submission' => $submissionStats && $submissionStats->latest_submission ?
 				date('d M Y - H:i', strtotime($submissionStats->latest_submission)) : '-',
 		];
 	}
