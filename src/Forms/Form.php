@@ -24,10 +24,12 @@ class Form extends Model implements FormInterface
 		'status',
 		'page_list',
 		'list_id',
+		'submit_button_text',
 	];
 
 	protected $nullable = [
-		'recipients'
+		'recipients',
+		'submit_button_text',
 	];
 
 	public static function boot()

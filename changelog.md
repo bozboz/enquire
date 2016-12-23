@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.3.1 (2016-12-23)
+- Allow submit button text to be changed in the CMS
+
 ## Version 2.3.0 (2016-12-21)
 - Update success message so multiple forms can exist on a single page
 - Link submissions to forms with a foreign key

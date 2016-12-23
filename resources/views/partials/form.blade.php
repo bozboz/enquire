@@ -21,7 +21,7 @@
 						</div><!--
 					@endforeach
 				 --><div class="enquiry-form__submit">
-						{!! Form::button('Submit', ['class' => 'btn--small', 'type' => 'submit']) !!}
+						{!! Form::button($form->submit_button_text ?: 'Submit', ['class' => 'btn--small', 'type' => 'submit']) !!}
 					</div><!--
 			 -->{{ Form::close() }}<!--
 			@endif

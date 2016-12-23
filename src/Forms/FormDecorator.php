@@ -66,6 +66,7 @@ class FormDecorator extends ModelAdminDecorator
 				'help_text_title' => 'Paste all the URLs you wish this form to display on separated by a new line.',
 				'help_text' => "Wildcards maybe be added using an asterisk (*). eg. '/contact/*' would display on any page whos URL began with '/contact/'",
 			]),
+			new TextField('submit_button_text'),
 			new HTMLEditorField('description', [
 				'help_text' => 'This text will show above the form.',
 			]),
