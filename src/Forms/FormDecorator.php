@@ -38,7 +38,7 @@ class FormDecorator extends ModelAdminDecorator
 		$submissionStats = $instance->submissions->first();
 		return [
 			'Name' => $instance->name,
-			'Recipients' => $instance->recipients,
+			'Recipients' => implode('<br>', explode(',', $instance->recipients)),
 			'Pages' => $pageList->implode('<br>'),
 			'Newsletter Signup' => $instance->newsletter_signup ? '<i class="fa fa-check"></i>' : '',
 			'Status' => $instance->getAttribute('status') == 1 ? '<i class="fa fa-check"></i>' : '',
