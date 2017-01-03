@@ -117,11 +117,11 @@ class FormController extends Controller
 
 	protected function uploadFiles(FormInterface $form, array $fields, array $input)
 	{
-		$formStorage = 'uploads/'.str_replace(' ', '', snake_case($form->name));
+		$formStorage = 'uploads/'.str_slug($form->name);
 		foreach ($fields as $field) {
 			$file = $this->request->file($field->name);
 			if ($file) {
-				$filename = time() . '-' . $file->getClientOriginalName();
+				$filename = time() . '-' . str_replace(' ', '-', $file->getClientOriginalName());
 				$file->move(public_path($formStorage), $filename);
 				$input[$field->name] = url($formStorage . '/' . $filename);
 			}

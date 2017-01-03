@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.3.2 (2017-01-03)
+- Strip spaces out of uploaded file names
+
 ## Version 2.3.1 (2016-12-23)
 - Allow submit button text to be changed in the CMS
 
