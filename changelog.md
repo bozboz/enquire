@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.3.3 (2017-01-03)
+- Require admin v2.* in composer.json
+
 ## Version 2.3.2 (2017-01-03)
 - Strip spaces out of uploaded file names
 
