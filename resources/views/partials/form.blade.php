@@ -8,8 +8,6 @@
 				 --><div class="enquiry-form__description">
 						{!!$form->description!!}
 					</div><!--
-				@else
-				 --><div class="enquiry-form__heading">{{ $form->name }}</div><!--
 				@endif
 
 			 -->{{ Form::open(['route' => 'process-enquiry', 'files' => true, 'class' => 'js-form']) }}<!--

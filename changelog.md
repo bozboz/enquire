@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.3.4 (2017-01-26)
+- Strip empty WYSIWYG content from description
+
 ## Version 2.3.3 (2017-01-03)
 - Require admin v2.* in composer.json
 

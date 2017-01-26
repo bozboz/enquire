@@ -86,6 +86,13 @@ class Form extends Model implements FormInterface
 		return '/'.preg_replace('(^/|^'.Request::root().'/)', '', $path);
 	}
 
+	public function getDescriptionAttribute()
+	{
+		if (trim(strip_tags($this->attributes['description']))) {
+			return $this->attributes['description'];
+		}
+	}
+
 	public function getPageListAttribute()
 	{
 		if ($this->paths) {
