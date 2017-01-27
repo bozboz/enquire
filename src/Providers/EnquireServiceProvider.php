@@ -84,6 +84,10 @@ class EnquireServiceProvider extends ServiceProvider
 		    'edit_enquire_submissions'   => 'Bozboz\Permissions\Rules\ModelRule',
 		    'delete_enquire_submissions' => 'Bozboz\Permissions\Rules\ModelRule',
 
+		    'create_enquire_form_fields' => 'Bozboz\Permissions\Rules\ModelRule',
+		    'edit_enquire_form_fields' => 'Bozboz\Permissions\Rules\ModelRule',
+		    'delete_enquire_form_fields' => 'Bozboz\Permissions\Rules\ModelRule',
+
 		]);
 
 	}

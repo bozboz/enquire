@@ -2,6 +2,7 @@
 
 ## Version 2.3.5 (2017-01-27)
 - Fix form create screen
+- Allow separate form and field permissions
 
 ## Version 2.3.4 (2017-01-26)
 - Strip empty WYSIWYG content from description

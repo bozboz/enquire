@@ -85,19 +85,22 @@ class FormFieldAdminController extends ModelAdminController
 		return action('\\' . static::class . '@index', ['form' => $instance->form_id]);
 	}
 
-    protected function createPermissions($stack, $instance)
+    public function createPermissions($stack, $instance)
     {
         $stack->add('create_enquire_forms', $instance);
+        $stack->add('create_enquire_form_fields', $instance);
     }
 
     protected function editPermissions($stack, $instance)
     {
         $stack->add('edit_enquire_forms', $instance);
+        $stack->add('edit_enquire_form_fields', $instance);
     }
 
     protected function deletePermissions($stack, $instance)
     {
         $stack->add('delete_enquire_forms', $instance);
+        $stack->add('delete_enquire_form_fields', $instance);
     }
 
     protected function viewPermissions($stack)
