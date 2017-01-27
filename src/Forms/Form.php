@@ -88,7 +88,7 @@ class Form extends Model implements FormInterface
 
 	public function getDescriptionAttribute()
 	{
-		if (trim(strip_tags($this->attributes['description']))) {
+		if (array_key_exists('description', $this->attributes) && trim(strip_tags($this->attributes['description']))) {
 			return $this->attributes['description'];
 		}
 	}
