@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.3.6 (2017-02-08)
+- Fix validation for files
+
 ## Version 2.3.5 (2017-01-27)
 - Fix form create screen
 - Allow separate form and field permissions

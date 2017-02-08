@@ -24,6 +24,7 @@ class FormController extends Controller
 	protected $formRepository;
 	protected $mailer;
 	protected $request;
+	protected $form;
 
 	use ValidatesRequests;
 
@@ -39,6 +40,7 @@ class FormController extends Controller
 		$input = $this->request->all();
 
 		$form = $this->formRepository->find($input['form_id']);
+		$this->form = $form;
 
 		if ( ! $form) {
 			return abort(500, "Form {$input['form_id']} not found!");
@@ -94,7 +96,7 @@ class FormController extends Controller
 			});
 
 			if ($rules->count()) {
-				if (is_array($input[$field->name])) {
+				if (array_key_exists($field->name, $input) && is_array($input[$field->name])) {
 					foreach ($input[$field->name] as $name => $value) {
 						$validationRules["{$field->name}.{$name}"] = $rules->implode('|');
 					}
@@ -106,6 +108,16 @@ class FormController extends Controller
 
 		return $validationRules;
 	}
+
+    /**
+     * Get the URL we should redirect to after form errors.
+     *
+     * @return string
+     */
+    protected function getRedirectUrl()
+    {
+        return url()->previous() . '#' . $this->form->html_id;
+    }
 
 	/**
 	 * No default implementation
