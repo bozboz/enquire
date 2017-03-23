@@ -7,6 +7,7 @@ use Bozboz\Admin\Base\Sorting\Sortable;
 use Bozboz\Admin\Base\Sorting\SortableTrait;
 use Bozboz\Enquire\Forms\Fields\Validation\Rule;
 use Bozboz\Enquire\Forms\Form;
+use Illuminate\Support\Facades\Config;
 
 class Field extends Model implements Sortable
 {
@@ -41,6 +42,21 @@ class Field extends Model implements Sortable
 	public function getNameAttribute()
 	{
 		return trim(preg_replace('/[^\w]+/', '_', (strtolower($this->label))), trim('_'));
+	}
+
+	public function getTypeAttribute()
+	{
+		return array_search($this->input_type, Config::get('enquire.fields'));
+	}
+
+	public function getTypeLabelAttribute()
+	{
+		return studly_case($this->type);
+	}
+
+	public function hasOptions()
+	{
+		return array_search($this->type, Config::get('enquire.fields_with_options'));
 	}
 
 	protected function sortPrependOnCreate()

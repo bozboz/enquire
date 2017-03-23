@@ -2,6 +2,7 @@
 
 ## Version 2.4.0 (Future)
 - Add jam field for selecting forms on entities
+- Add radio field type
 
 ## Version 2.3.6 (2017-02-08)
 - Fix validation for files
