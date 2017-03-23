@@ -6,10 +6,14 @@ use Bozboz\Admin\Http\Controllers\ModelAdminController;
 use Bozboz\Admin\Reports\Actions\Permissions\IsValid;
 use Bozboz\Admin\Reports\Actions\Presenters\Link;
 use Bozboz\Admin\Reports\Actions\Presenters\Urls\Custom;
+use Bozboz\Admin\Reports\Actions\Presenters\Urls\Url;
 use Bozboz\Enquire\Forms\CSVReport;
 use Bozboz\Enquire\Forms\Form;
 use Bozboz\Enquire\Forms\FormDecorator;
 use Bozboz\Enquire\Forms\FormInterface;
+use Bozboz\Enquire\Http\Controllers\Admin\FormFieldAdminController;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 
 class FormAdminController extends ModelAdminController
 {
@@ -64,6 +68,45 @@ class FormAdminController extends ModelAdminController
                 new IsValid([$this, 'canEdit'])
             ),
         ], parent::getRowActions());
+    }
+
+    public function getFormActions($instance)
+    {
+        return [
+            (
+                $instance->load('fields')->fields->isEmpty()
+                    ? $this->actions->submit('Save and Create Fields', 'fa fa-save', [
+                        'name' => 'after_save',
+                        'value' => 'fields',
+                    ])
+                    : $this->actions->submit('Save and Exit', 'fa fa-save', [
+                        'name' => 'after_save',
+                        'value' => 'exit',
+                    ])
+            ),
+            $this->actions->submit('Save', 'fa fa-save', [
+                'name' => 'after_save',
+                'value' => 'continue',
+            ]),
+            $this->actions->custom(
+                new Link(new Url($this->getListingUrl($instance)), 'Back to listing', 'fa fa-list-alt', [
+                    'class' => 'btn-default pull-right space-left',
+                ]),
+                new IsValid([$this, 'canView'])
+            ),
+        ];
+    }
+
+    protected function reEdit($instance)
+    {
+        switch (Input::get('after_save')) {
+            case 'fields':
+                return Redirect::action('\\' . FormFieldAdminController::class . '@index', ['form' => $instance->id]);
+            break;
+
+            default:
+                return parent::reEdit($instance);
+        }
     }
 
     public function downloadReport(Form $form)
