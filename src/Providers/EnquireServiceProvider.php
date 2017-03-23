@@ -55,6 +55,8 @@ class EnquireServiceProvider extends ServiceProvider
 			}
 		});
 
+		$this->jamFields();
+
 	}
 
 	protected function viewComposers()
@@ -91,4 +93,13 @@ class EnquireServiceProvider extends ServiceProvider
 		]);
 
 	}
+
+    protected function jamFields()
+    {
+    	if ($this->app->bound('FieldMapper')) {
+	        $this->app['FieldMapper']->register([
+	            'form' => \Bozboz\Enquire\Jam\Fields\Form::class,
+	        ]);
+    	}
+    }
 }

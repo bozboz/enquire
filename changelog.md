@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.4.0 (Future)
+- Add jam field for selecting forms on entities
+
 ## Version 2.3.6 (2017-02-08)
 - Fix validation for files
 
