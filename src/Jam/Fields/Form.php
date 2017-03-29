@@ -36,7 +36,9 @@ class Form extends BelongsTo
 
     public function relation(Value $value)
     {
-        return $value->belongsTo(Relation::class, 'foreign_key');
+        return $value->belongsTo(Relation::class, 'foreign_key')->with(['fields' => function($query) {
+            $query->orderBy('sorting');
+        }]);
     }
 
     public function getOptionFields()
