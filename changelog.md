@@ -5,6 +5,7 @@
 - Add radio field type
 - Separate form partial for manual, non view composer usage
 - Change save and exit to save and create fields on forms with no fields
+- Add current url field type
 
 ## Version 2.3.6 (2017-02-08)
 - Fix validation for files
