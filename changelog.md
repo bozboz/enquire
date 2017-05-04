@@ -1,6 +1,6 @@
 # Bozboz Forms Package Changelog
 
-## Version 2.4.0 (Future)
+## Version 2.4.0 (2017-05-04)
 - Add jam field for selecting forms on entities
 - Add radio field type
 - Separate form partial for manual, non view composer usage
