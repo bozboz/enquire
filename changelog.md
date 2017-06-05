@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.5.0 (2017-06-05)
+- Allow submissions that have failed the token check to skip honeypot time validation
+
 ## Version 2.4.0 (2017-05-04)
 - Add jam field for selecting forms on entities
 - Add radio field type

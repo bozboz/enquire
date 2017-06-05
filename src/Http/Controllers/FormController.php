@@ -79,8 +79,11 @@ class FormController extends Controller
 	{
 		$validationRules = [
 			'my_name' => 'honeypot',
-			'my_time' => 'required|honeytime:5'
 		];
+
+		if ( ! key_exists('retry', $input)) {
+			$validationRules['my_time'] = 'required|honeytime:5';
+		}
 
 		$form->load('fields.validationRules');
 
