@@ -23,4 +23,20 @@ class Form extends BelongsTo
             $query->orderBy('sorting');
         }]);
     }
+
+    public function getAdminField(Entity $instance, EntityDecorator $decorator, Value $value)
+    {
+        if ( ! Relation::count()) {
+            $this->help_text = "<br>No forms have been created yet, <a href='/admin/enquiry-forms/create' target='_blank'><strong>head here to create a new form</strong></a>.";
+        } else {
+            $form = $this->relation($value)->first();
+            if ($form) {
+                $this->help_text .= "<br>
+                    <a target='_blank' class='btn btn-default btn-sm' href='/admin/enquiry-forms/{$form->id}/edit'>Edit Form</a>
+                    <a target='_blank' class='btn btn-default btn-sm' href='/admin/enquiry-form-fields?form={$form->id}'>Edit form fields</a>
+                ";
+            }
+        }
+        return parent::getAdminField($instance, $decorator, $value);
+    }
 }

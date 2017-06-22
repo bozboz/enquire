@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.6.0 (2017-06-22)
+- Add some helpful links and info to the jam form field
+
 ## Version 2.5.0 (2017-06-05)
 - Allow submissions that have failed the token check to skip honeypot time validation
 
