@@ -3,6 +3,7 @@
 namespace Bozboz\Enquire\Http\Controllers;
 
 use Bozboz\Enquire\Events\SuccessfulFormSubmission;
+use Bozboz\Enquire\Exceptions\FormNotFoundException;
 use Bozboz\Enquire\Exceptions\SignupException;
 use Bozboz\Enquire\Forms\FormException;
 use Bozboz\Enquire\Forms\FormInterface;
@@ -43,7 +44,7 @@ class FormController extends Controller
 		$this->form = $form;
 
 		if ( ! $form) {
-			return abort(500, "Form {$input['form_id']} not found!");
+			throw new FormNotFoundException("Form {$input['form_id']} not found!");
 		}
 
 		$this->validate($this->request, $this->getValidationRules($form, $input));
