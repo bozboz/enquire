@@ -3,9 +3,8 @@
 namespace Bozboz\Enquire\Http\Controllers;
 
 use Bozboz\Enquire\Events\SuccessfulFormSubmission;
-use Bozboz\Enquire\Exceptions\FormNotFoundException;
+use Bozboz\Enquire\Exceptions\FormException;
 use Bozboz\Enquire\Exceptions\SignupException;
-use Bozboz\Enquire\Forms\FormException;
 use Bozboz\Enquire\Forms\FormInterface;
 use Bozboz\Enquire\Forms\FormRepositoryInterface;
 use Bozboz\Enquire\Submissions\Submission;
@@ -44,7 +43,7 @@ class FormController extends Controller
 		$this->form = $form;
 
 		if ( ! $form) {
-			throw new FormNotFoundException("Form {$input['form_id']} not found!");
+			throw FormException::notFound($input['form_id']);
 		}
 
 		$this->validate($this->request, $this->getValidationRules($form, $input));
@@ -128,7 +127,7 @@ class FormController extends Controller
 	 */
 	protected function newsletterSignUp($form)
 	{
-		throw new FormException("Attempting to use newletter signup with no implementation", 1);
+		throw FormException::noSignup();
 	}
 
 	protected function uploadFiles(FormInterface $form, array $fields, array $input)
