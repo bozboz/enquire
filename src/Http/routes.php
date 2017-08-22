@@ -8,6 +8,11 @@ Route::group(['middleware' => 'web', 'prefix' => 'admin', 'namespace' => 'Bozboz
         'as' => 'admin.enquiry-forms.download-report',
     ]);
 
+    Route::get('enquire-forms/duplicate/{form}', [
+        'uses' => 'FormAdminController@duplicateForm',
+        'as' => 'admin.enquiry-forms.duplicate-form',
+    ]);
+
     Route::resource('enquiry-form-fields', 'FormFieldAdminController');
     Route::get('enquiry-form-fields/{formId}/{fieldTypeAlias}/create', [
         'as' => 'admin.enquiry-form-field.create',

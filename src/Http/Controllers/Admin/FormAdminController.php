@@ -67,6 +67,17 @@ class FormAdminController extends ModelAdminController
                 ),
                 new IsValid([$this, 'canEdit'])
             ),
+            $this->actions->custom(
+                new Link(
+                    new Custom(function($instance) {
+                        return route('admin.enquiry-forms.duplicate-form', ['form' => $instance->id]);
+                    }),
+                    'Duplicate',
+                    'fa fa-clone',
+                    ['class' => 'btn btn-default btn-sm']
+                ),
+                new IsValid([$this, 'canDuplicate'])
+            ),
         ], parent::getRowActions());
     }
 
@@ -121,6 +132,11 @@ class FormAdminController extends ModelAdminController
     }
 
     public function canReport()
+    {
+        return $this->submissions->canView();
+    }
+
+    public function canDuplicate()
     {
         return $this->submissions->canView();
     }
