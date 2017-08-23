@@ -14,6 +14,7 @@ use Bozboz\Enquire\Forms\FormInterface;
 use Bozboz\Enquire\Http\Controllers\Admin\FormFieldAdminController;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Collection;
 
 class FormAdminController extends ModelAdminController
 {
@@ -66,6 +67,17 @@ class FormAdminController extends ModelAdminController
                     ['class' => 'btn btn-default btn-sm']
                 ),
                 new IsValid([$this, 'canEdit'])
+            ),
+            $this->actions->custom(
+                new Link(
+                    new Custom(function($instance) {
+                        return route('admin.enquiry-forms.duplicate-form', ['form' => $instance->id]);
+                    }),
+                    'Duplicate',
+                    'fa fa-clone',
+                    ['class' => 'btn btn-default btn-sm']
+                ),
+                new IsValid([$this, 'canDuplicate'])
             ),
         ], parent::getRowActions());
     }
@@ -120,7 +132,37 @@ class FormAdminController extends ModelAdminController
         return $report->render(['filename' => str_slug($form->name) . '-report-' . date('Y-m-d') . '.csv',]);
     }
 
+    public function duplicateForm(Form $form)
+    {
+        if ( ! $this->canDuplicate()) {
+            return abort(403);
+        }
+
+        $clone = $form->replicate();
+        $clone->save();
+
+        $this->duplicateRelatedModels($clone, $form->fields()->get());
+        $this->duplicateRelatedModels($clone, $form->paths()->get());
+        $clone->save();
+
+        return parent::edit($clone->id);
+    }
+
+    protected function duplicateRelatedModels(Form $form, Collection $collection)
+    {
+        $collection->each(function($model) use($form) {
+            $clone = $model->replicate();
+            $clone->form()->associate($form);
+            $clone->save();
+        });
+    }
+
     public function canReport()
+    {
+        return $this->submissions->canView();
+    }
+
+    public function canDuplicate()
     {
         return $this->submissions->canView();
     }
