@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.9.0 (2017-08-23)
+- Add ability to duplicate existing forms
+
 ## Version 2.8.0 (2017-07-11)
 - Add more help text to jam form field
 
