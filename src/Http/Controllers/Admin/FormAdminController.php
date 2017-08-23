@@ -143,7 +143,6 @@ class FormAdminController extends ModelAdminController
 
         $this->duplicateRelatedModels($clone, $form->fields()->get());
         $this->duplicateRelatedModels($clone, $form->paths()->get());
-        $clone->save();
 
         return parent::edit($clone->id);
     }
