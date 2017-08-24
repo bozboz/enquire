@@ -2,6 +2,7 @@
 
 ## Version 2.9.1 (Future)
 - Make submission controller property on form controller protected not private
+- Rearrange permissions to make FormAdminController easier to extend
 
 ## Version 2.9.0 (2017-08-23)
 - Add ability to duplicate existing forms
