@@ -163,7 +163,7 @@ class FormAdminController extends ModelAdminController
 
     public function canDuplicate()
     {
-        return $this->submissions->canView();
+        return $this->canCreate();
     }
 
     protected function createPermissions($stack, $instance)
