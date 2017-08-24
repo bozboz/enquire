@@ -22,11 +22,11 @@ class FormAdminController extends ModelAdminController
 
     protected $useActions = true;
 
-	public function __construct(FormDecorator $decorator, FormSubmissionAdminController $submissions)
-	{
-		parent::__construct($decorator);
+    public function __construct(FormDecorator $decorator, FormSubmissionAdminController $submissions)
+    {
+        parent::__construct($decorator);
         $this->submissions = $submissions;
-	}
+    }
 
     protected function getRowActions()
     {
@@ -41,7 +41,7 @@ class FormAdminController extends ModelAdminController
                             'View',
                             'fa fa-eye'
                         ),
-                        new IsValid([$this->submissions, 'canView'])
+                        new IsValid([$this, 'canViewSubmissions'])
                     ),
                     $this->actions->custom(
                         new Link(
@@ -123,7 +123,7 @@ class FormAdminController extends ModelAdminController
 
     public function downloadReport(Form $form)
     {
-        if ( ! $this->canReport()) {
+        if ( ! $this->canReport($form)) {
             return abort(403);
         }
 
@@ -156,14 +156,19 @@ class FormAdminController extends ModelAdminController
         });
     }
 
-    public function canReport()
+    public function canReport($instance)
     {
         return $this->submissions->canView();
     }
 
-    public function canDuplicate()
+    public function canViewSubmissions($instance)
     {
-        return $this->canCreate();
+        return $this->submissions->canView();
+    }
+
+    public function canDuplicate($instance)
+    {
+        return $this->canCreate($instance);
     }
 
     protected function createPermissions($stack, $instance)
