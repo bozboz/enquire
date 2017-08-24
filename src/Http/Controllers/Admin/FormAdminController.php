@@ -18,7 +18,7 @@ use Illuminate\Support\Collection;
 
 class FormAdminController extends ModelAdminController
 {
-    private $submissions;
+    protected $submissions;
 
     protected $useActions = true;
 

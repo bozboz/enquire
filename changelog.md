@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.9.1 (Future)
+- Make submission controller property on form controller protected not private
+
 ## Version 2.9.0 (2017-08-23)
 - Add ability to duplicate existing forms
 
