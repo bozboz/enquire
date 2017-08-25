@@ -1,8 +1,9 @@
 # Bozboz Forms Package Changelog
 
-## Version 2.9.1 (Future)
+## Version 2.9.1 (2017-08-25)
 - Make submission controller property on form controller protected not private
 - Rearrange permissions to make FormAdminController easier to extend
+- Fix missing argument when invoking canDuplicate from duplicateForm method
 
 ## Version 2.9.0 (2017-08-23)
 - Add ability to duplicate existing forms
