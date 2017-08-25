@@ -134,7 +134,7 @@ class FormAdminController extends ModelAdminController
 
     public function duplicateForm(Form $form)
     {
-        if ( ! $this->canDuplicate()) {
+        if ( ! $this->canDuplicate($form)) {
             return abort(403);
         }
 
