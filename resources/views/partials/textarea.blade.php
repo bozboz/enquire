@@ -1,4 +1,4 @@
-{{ Form::label($field->name, $field->label.($field->required ? ' *' : ''), ['class' => 'sr-only']) }}
+{{ Form::label($field->name, $field->label.($field->required ? ' *' : '')) }}
 {{ Form::textarea($field->name, null, array_filter([
     'class' => 'form__input',
     'placeholder' => $field->placeholder,

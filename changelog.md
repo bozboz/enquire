@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.10.0 (2017-08-31)
+- Remove sr-only class from labels
+
 ## Version 2.9.1 (2017-08-25)
 - Make submission controller property on form controller protected not private
 - Rearrange permissions to make FormAdminController easier to extend
