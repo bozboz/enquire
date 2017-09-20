@@ -19,7 +19,7 @@ class Form extends BelongsTo
 
     public function relation(Value $value)
     {
-        return parent::relation($value)->with(['fields' => function($query) {
+        return parent::relation($value)->active()->with(['fields' => function($query) {
             $query->orderBy('sorting');
         }]);
     }

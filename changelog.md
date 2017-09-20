@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.10.1 (Future)
+- Exclude inactive forms in jam field relation
+
 ## Version 2.10.0 (2017-08-31)
 - Remove sr-only class from labels
 
