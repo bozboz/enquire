@@ -1,6 +1,6 @@
 # Bozboz Forms Package Changelog
 
-## Version 2.10.1 (Future)
+## Version 2.10.1 (2017-09-25)
 - Exclude inactive forms in jam field relation
 
 ## Version 2.10.0 (2017-08-31)
