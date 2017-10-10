@@ -21,4 +21,7 @@ return [
     'from_address' => '',
 
     'mailchimp_api_key' => '',
+
+    'forms_by_path_enabled' => false,
+    'newsletter_signup_enabled' => false,
 ];

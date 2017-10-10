@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.11.0 (2017-10-10)
+- Allow page list and newsletter signup options to be toggled
+
 ## Version 2.10.1 (2017-09-25)
 - Exclude inactive forms in jam field relation
 
