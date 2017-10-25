@@ -1,5 +1,9 @@
 # Bozboz Forms Package Changelog
 
+
+## Version 2.11.1 (2017-10-25)
+- Fix permission on form fields button on forms listing
+
 ## Version 2.11.0 (2017-10-10)
 - Allow page list and newsletter signup options to be toggled
 

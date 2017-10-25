@@ -19,13 +19,15 @@ use Illuminate\Support\Collection;
 class FormAdminController extends ModelAdminController
 {
     protected $submissions;
+    private $fields;
 
     protected $useActions = true;
 
-    public function __construct(FormDecorator $decorator, FormSubmissionAdminController $submissions)
+    public function __construct(FormDecorator $decorator, FormSubmissionAdminController $submissions, FormFieldAdminController $fields)
     {
         parent::__construct($decorator);
         $this->submissions = $submissions;
+        $this->fields = $fields;
     }
 
     protected function getRowActions()
@@ -66,7 +68,7 @@ class FormAdminController extends ModelAdminController
                     'fa fa-list',
                     ['class' => 'btn btn-default btn-sm']
                 ),
-                new IsValid([$this, 'canEdit'])
+                new IsValid([$this->fields, 'canEdit'])
             ),
             $this->actions->custom(
                 new Link(
