@@ -1,5 +1,7 @@
 # Bozboz Forms Package Changelog
 
+## Version 2.11.2 (2017-10-31)
+- Fix checkbox view
 
 ## Version 2.11.1 (2017-10-25)
 - Fix permission on form fields button on forms listing
