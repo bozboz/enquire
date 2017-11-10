@@ -63,7 +63,7 @@ class FieldDecorator extends ModelAdminDecorator
 			new BelongsToManyField($this->rules, $instance->validationRules(), [
 				'key' => 'rule',
 				'data-tags' => 'true',
-				'help_text' => 'Enter validation rules for the field value',
+				'help_text' => '<a href="https://laravel.com/docs/5.2/validation#available-validation-rules" target="_blank">See list of available validation rules.</a>',
 			]),
 			($instance->hasOptions() || $instance->input_type == 'enquire::partials.dropdown'
 				? new TextareaField('options', [
