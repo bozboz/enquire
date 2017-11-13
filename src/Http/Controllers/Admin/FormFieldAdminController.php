@@ -2,16 +2,17 @@
 
 namespace Bozboz\Enquire\Http\Controllers\Admin;
 
-use Bozboz\Admin\Http\Controllers\ModelAdminController;
-use Bozboz\Admin\Reports\Actions\Permissions\IsValid;
-use Bozboz\Admin\Reports\Actions\Presenters\Link;
-use Bozboz\Admin\Reports\Actions\Presenters\Urls\Route;
 use Bozboz\Admin\Reports\Report;
-use Bozboz\Enquire\Forms\Fields\FieldDecorator;
-use Bozboz\Enquire\Forms\FormRepository;
+use Bozboz\Enquire\Forms\Fields\Field;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Bozboz\Enquire\Forms\FormRepository;
+use Illuminate\Support\Facades\Redirect;
+use Bozboz\Enquire\Forms\Fields\FieldDecorator;
+use Bozboz\Admin\Reports\Actions\Presenters\Link;
+use Bozboz\Admin\Reports\Actions\Permissions\IsValid;
+use Bozboz\Admin\Http\Controllers\ModelAdminController;
+use Bozboz\Admin\Reports\Actions\Presenters\Urls\Route;
 
 class FormFieldAdminController extends ModelAdminController
 {
@@ -49,15 +50,13 @@ class FormFieldAdminController extends ModelAdminController
 	{
 		return [
 			$this->actions->dropdown(
-				collect(Config::get('enquire.fields'))->map(function($namespace, $fieldType) {
-					return $this->actions->custom(
-						new Link(
-							[$this->getActionName('createForForm'), [Request::get('form'), $fieldType]],
-							studly_case($fieldType)
-						),
-						new IsValid([$this, 'canCreate'])
-					);
-				}),
+				Field::getMapper()->getAll()->map(function($field, $fieldType) {
+                    return $this->actions->custom(
+                        new Link([$this->getActionName('createForForm'), [Request::get('form'), $fieldType]],
+                            $field->getDescriptiveName()),
+                        new IsValid([$this, 'canCreate'])
+                    );
+                }),
 				'New Field',
 				'fa fa-plus',
 				['class' => 'btn-success'],

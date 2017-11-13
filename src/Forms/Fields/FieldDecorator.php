@@ -33,7 +33,7 @@ class FieldDecorator extends ModelAdminDecorator
 	{
 		return [
 			'Name' => $instance->label,
-			'Type' => $instance->type_label,
+			'Type' => $instance->getDescriptiveName(),
 			'Required' => $instance->required ? '<i class="fa fa-check"></i>' : '',
 		];
 	}
@@ -54,7 +54,7 @@ class FieldDecorator extends ModelAdminDecorator
 
 	public function getFields($instance)
 	{
-		return [
+		return array_merge([
 			new HiddenField(['name' => 'input_type']),
 			new TextField(['name' => 'type_label', 'disabled' => 'disabled']),
 			new TextField(['name' => 'label', 'label' => 'Name']),
@@ -65,11 +65,7 @@ class FieldDecorator extends ModelAdminDecorator
 				'data-tags' => 'true',
 				'help_text' => '<a href="https://laravel.com/docs/5.2/validation#available-validation-rules" target="_blank">See list of available validation rules.</a>',
 			]),
-			($instance->hasOptions() || $instance->input_type == 'enquire::partials.dropdown'
-				? new TextareaField('options', [
-					'help_text' => 'Enter options a new line between each one'
-				]) : null),
 			new HiddenField(['name' => 'form_id']),
-		];
+		], $instance->getOptionFields());
 	}
 }

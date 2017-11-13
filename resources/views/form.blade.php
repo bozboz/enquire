@@ -13,7 +13,7 @@
              -->{{ Form::hidden('form_id', $form->id) }}<!--
                 @foreach ($form->fields as $field)
                  --><div class="enquiry-form__field">
-                        @include($field->input_type)
+                        @include($field->getView())
                     </div><!--
                 @endforeach
              --><div class="enquiry-form__submit">
