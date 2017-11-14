@@ -35,13 +35,10 @@ class FormFieldAdminController extends ModelAdminController
 
 	public function createForForm($formId, $fieldTypeAlias)
 	{
-		$instance = $this->decorator->newModelInstance();
+		$instance = $this->decorator->newModelInstance(['input_type' => $fieldTypeAlias]);
 
 		$form = $this->formRepository->find($formId);
 		$instance->form()->associate($form);
-
-		$type = Config::get("enquire.fields.{$fieldTypeAlias}");
-		$instance->input_type = $type;
 
 		return $this->renderFormFor($instance, $this->createView, 'POST', 'store');
 	}

@@ -168,11 +168,16 @@ class FormController extends Controller
 		$submission->form()->associate($form);
 		$submission->save();
 
-		foreach ($form->fields as $field) {
+		$this->logFields($submission, $form->fields, $input);
+	}
+
+	protected function logFields($submission, $fields, $input)
+	{
+		foreach ($fields as $field) {
 			if (array_key_exists($field->name, $input)) {
 				$value = new Value([
 					'label' => $field->label,
-					'value' => trim(implode(', ', (array)$input[$field->name]))
+					'value' => $field->formatInputForLog($input[$field->name])
 				]);
 				$value->submission()->associate($submission);
 				$value->save();

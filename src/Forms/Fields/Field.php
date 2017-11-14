@@ -4,6 +4,7 @@ namespace Bozboz\Enquire\Forms\Fields;
 
 use Bozboz\Admin\Base\Model;
 use Bozboz\Enquire\Forms\Form;
+use Bozboz\Admin\Fields\TextareaField;
 use Illuminate\Support\Facades\Config;
 use Bozboz\Admin\Base\Sorting\Sortable;
 use Bozboz\Admin\Base\Sorting\SortableTrait;
@@ -49,6 +50,12 @@ class Field extends Model implements Sortable
         return $this->view;
     }
 
+    public function setView($view)
+    {
+        $this->view = $view;
+        return $this;
+    }
+
     public function form()
     {
         return $this->belongsTo(Form::class);
@@ -66,17 +73,12 @@ class Field extends Model implements Sortable
 
     public function getTypeAttribute()
     {
-        return array_search($this->input_type, Config::get('enquire.fields'));
+        return $this->input_type;
     }
 
     public function getTypeLabelAttribute()
     {
-        return studly_case($this->type);
-    }
-
-    public function hasOptions()
-    {
-        return array_search($this->type, Config::get('enquire.fields_with_options'));
+        return studly_case($this->input_type);
     }
 
     protected function sortPrependOnCreate()
@@ -109,6 +111,17 @@ class Field extends Model implements Sortable
         return preg_replace('/([A-Z])/', ' $1', studly_case($this->input_type));
     }
 
+    public function getOptionFields($instance)
+    {
+        return [
+            array_search($this->input_type, Config::get('enquire.fields_with_options'))
+                ? new TextareaField('options', [
+                    'help_text' => 'Enter options a new line between each one'
+                ])
+                : null
+        ];
+    }
+
     /**
      * Create a new instance of the given model.
      *
@@ -118,12 +131,13 @@ class Field extends Model implements Sortable
      */
     public function newInstance($attributes = [], $exists = false)
     {
-        if (array_key_exists('input_type', $attributes)) {
-            $class = config("enquire.field-models.{$attributes['input_type']}") ?: static::class;
+        if (array_key_exists('input_type', $attributes) && static::getMapper()->has($attributes['input_type'])) {
+            $model = static::getMapper()->get($attributes['input_type']);
         } else {
             $class = static::class;
+            $model = new $class;
         }
-        $model = new $class((array) $attributes);
+        $model->fill((array) $attributes);
         $model->exists = $exists;
 
         if (array_key_exists('view', $attributes)) {

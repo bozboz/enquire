@@ -59,11 +59,12 @@ class EnquireServiceProvider extends ServiceProvider
     protected function registerFields()
     {
         collect(config('enquire.fields'))->each(function($view, $type) {
-            $this->app['EnquireFieldMapper']->register($type, (new Field)->newInstance([
+            $this->app['EnquireFieldMapper']->register($type, (new Field([
                 'input_type' => $type,
-                'view' => $view,
-            ]));
+            ]))->setView($view));
         });
+
+        $this->app['EnquireFieldMapper']->register('multi-form', new \App\Enquire\Forms\Fields\MultiformField);
     }
 
     protected function viewComposers()

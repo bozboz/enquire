@@ -10,9 +10,11 @@ class FieldMapper
     {
         if (is_array($aliasOrArray)) {
             foreach ($aliasOrArray as $alias => $class) {
+                $class->input_type = $alias;
                 $this->register($alias, $class);
             }
         } else {
+            $class->input_type = $aliasOrArray;
             $this->mapping[$aliasOrArray] = $class;
         }
     }

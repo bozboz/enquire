@@ -66,6 +66,29 @@ class FieldDecorator extends ModelAdminDecorator
 				'help_text' => '<a href="https://laravel.com/docs/5.2/validation#available-validation-rules" target="_blank">See list of available validation rules.</a>',
 			]),
 			new HiddenField(['name' => 'form_id']),
-		], $instance->getOptionFields());
+		], $instance->getOptionFields($instance));
+	}
+
+	/**
+	 * Get a new Entity instance, and if a template_id is present in the
+	 * attributes, associate it with the Entity.
+	 *
+	 * @param  array  $attributes
+	 * @return Bozboz\Jam\Entities\Entity
+	 */
+	public function newModelInstance($attributes = [])
+	{
+		return $this->model->newInstance($attributes);
+	}
+
+	/**
+	 * Return a new entity, associated with given $template
+	 *
+	 * @param  Bozboz\Jam\Templates\Template  $template
+	 * @return Bozboz\Jam\Entities\Entity
+	 */
+	public function newFieldOfType($input_type)
+	{
+		return $this->model->newInstance(['input_type' => $input_type]);
 	}
 }
