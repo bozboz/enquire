@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+# Version 3.0.0 (Future)
+- Smarter field models
+
 ## Version 2.11.2 (2017-10-31)
 - Fix checkbox view
 
