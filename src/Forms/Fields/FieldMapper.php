@@ -27,21 +27,19 @@ class FieldMapper
     public function get($type_alias)
     {
         $mapping = $this->mapping[$type_alias];
-        if (is_string($mapping)) {
-            $mapping = app($mapping);
-        } else {
-            $mapping = $mapping;
-        }
-        $mapping->alias = $type_alias;
 
-        return $mapping;
+        $model = $mapping->replicate();
+        $model->input_type = $type_alias;
+        $model->setView($mapping->getView());
+
+        return $model;
     }
 
     public function getAll($filterClass = null)
     {
         return collect($this->mapping)->each(function($map, $alias) {
             if (!is_string($map)) {
-                $map->alias = $alias;
+                $map->input_type = $alias;
             }
             return $map;
         })->filter(function($item) use ($filterClass) {

@@ -168,21 +168,7 @@ class FormController extends Controller
 		$submission->form()->associate($form);
 		$submission->save();
 
-		$this->logFields($submission, $form->fields, $input);
-	}
-
-	protected function logFields($submission, $fields, $input)
-	{
-		foreach ($fields as $field) {
-			if (array_key_exists($field->name, $input)) {
-				$value = new Value([
-					'label' => $field->label,
-					'value' => $field->formatInputForLog($input[$field->name])
-				]);
-				$value->submission()->associate($submission);
-				$value->save();
-			}
-		}
+		$submission->logFields($form->fields, $input);
 	}
 
 	protected function getSuccessResponse(FormInterface $form)

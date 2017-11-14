@@ -4,6 +4,7 @@ namespace Bozboz\Enquire\Forms\Fields;
 
 use Bozboz\Admin\Base\Model;
 use Bozboz\Enquire\Forms\Form;
+use Bozboz\Enquire\Submissions\Value;
 use Bozboz\Admin\Fields\TextareaField;
 use Illuminate\Support\Facades\Config;
 use Bozboz\Admin\Base\Sorting\Sortable;
@@ -43,6 +44,11 @@ class Field extends Model implements Sortable
     public static function getMapper()
     {
         return static::$mapper;
+    }
+
+    public function getForeignKey()
+    {
+        return 'field_id';
     }
 
     public function getView()
@@ -96,14 +102,24 @@ class Field extends Model implements Sortable
         return new FieldValidator;
     }
 
-    public function formatInputForLog($value)
+    public function logValue($submission, $input)
     {
-        return trim(implode(', ', (array)$value));
+        $value = new Value([
+            'label' => $this->label,
+            'value' => $this->formatInputForLog($input)
+        ]);
+        $value->submission()->associate($submission);
+        $value->save();
     }
 
-    public function formatInputForEmail($value)
+    public function formatInputForLog($input)
     {
-        return nl2br(e($field->formatInputForLog($value)));
+        return trim(implode(', ', (array)$input[$this->name]));
+    }
+
+    public function formatInputForEmail($input)
+    {
+        return nl2br(e($this->formatInputForLog($input)));
     }
 
     public function getDescriptiveName()
@@ -111,7 +127,7 @@ class Field extends Model implements Sortable
         return preg_replace('/([A-Z])/', ' $1', studly_case($this->input_type));
     }
 
-    public function getOptionFields($instance)
+    public function getOptionFields()
     {
         return [
             array_search($this->input_type, Config::get('enquire.fields_with_options'))
@@ -121,6 +137,8 @@ class Field extends Model implements Sortable
                 : null
         ];
     }
+
+    public function saveOptionFields($input) {}
 
     /**
      * Create a new instance of the given model.
@@ -134,15 +152,10 @@ class Field extends Model implements Sortable
         if (array_key_exists('input_type', $attributes) && static::getMapper()->has($attributes['input_type'])) {
             $model = static::getMapper()->get($attributes['input_type']);
         } else {
-            $class = static::class;
-            $model = new $class;
+            $model = new self;
         }
         $model->fill((array) $attributes);
         $model->exists = $exists;
-
-        if (array_key_exists('view', $attributes)) {
-            $model->view = $attributes['view'];
-        }
 
         return $model;
     }
@@ -169,5 +182,36 @@ class Field extends Model implements Sortable
         $model->setConnection($connection ?: $this->connection);
 
         return $model;
+    }
+
+    /**
+     * Get the names of the many-to-many relationships defined on the model
+     * that need to be processed.
+     *
+     * @return array
+     */
+    public function getSyncRelations()
+    {
+        return [];
+    }
+
+    /**
+     * Get the names of the sortable many-to-many relationships on the model
+     * return array
+     */
+    public function getSortableSyncRelations()
+    {
+        return [];
+    }
+
+    /**
+     * Get the names (and associated attribute to use) of list-style
+     * many-to-many relationship on the model that should be saved.
+     *
+     * @return array
+     */
+    public function getListRelations()
+    {
+        return [];
     }
 }

@@ -136,7 +136,7 @@ class Form extends Model implements FormInterface
 
 	public function fields()
 	{
-		return $this->hasMany(Field::class);
+		return $this->hasMany(Field::class)->orderBy('sorting');
 	}
 
 	public function paths()

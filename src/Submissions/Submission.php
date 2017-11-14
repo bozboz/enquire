@@ -33,4 +33,13 @@ class Submission extends Model
 	{
 		return new FormValidator;
 	}
+
+	public function logFields($fields, $input)
+	{
+		foreach ($fields as $field) {
+			if (array_key_exists($field->name, $input)) {
+				$field->logValue($this, $input);
+			}
+		}
+	}
 }

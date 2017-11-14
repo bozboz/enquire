@@ -63,8 +63,6 @@ class EnquireServiceProvider extends ServiceProvider
                 'input_type' => $type,
             ]))->setView($view));
         });
-
-        $this->app['EnquireFieldMapper']->register('multi-form', new \App\Enquire\Forms\Fields\MultiformField);
     }
 
     protected function viewComposers()

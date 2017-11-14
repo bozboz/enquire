@@ -38,13 +38,6 @@ class FieldDecorator extends ModelAdminDecorator
 		];
 	}
 
-	public function getListRelations()
-	{
-		return [
-			'validationRules' => 'rule'
-		];
-	}
-
 	public function getListingFilters()
 	{
 		return [
@@ -66,7 +59,13 @@ class FieldDecorator extends ModelAdminDecorator
 				'help_text' => '<a href="https://laravel.com/docs/5.2/validation#available-validation-rules" target="_blank">See list of available validation rules.</a>',
 			]),
 			new HiddenField(['name' => 'form_id']),
-		], $instance->getOptionFields($instance));
+		], $instance->getOptionFields());
+	}
+
+	public function setType($inputType)
+	{
+		$this->model = $this->newFieldOfType($inputType);
+		return $this;
 	}
 
 	/**
@@ -90,5 +89,38 @@ class FieldDecorator extends ModelAdminDecorator
 	public function newFieldOfType($input_type)
 	{
 		return $this->model->newInstance(['input_type' => $input_type]);
+	}
+
+	/**
+	 * Get the names of the many-to-many relationships defined on the model
+	 * that need to be processed.
+	 *
+	 * @return array
+	 */
+	public function getSyncRelations()
+	{
+		return $this->model->getSyncRelations();
+	}
+
+	/**
+	 * Get the names of the sortable many-to-many relationships on the model
+	 * return array
+	 */
+	public function getSortableSyncRelations()
+	{
+		return $this->model->getSortableSyncRelations();
+	}
+
+	/**
+	 * Get the names (and associated attribute to use) of list-style
+	 * many-to-many relationship on the model that should be saved.
+	 *
+	 * @return array
+	 */
+	public function getListRelations()
+	{
+		return array_merge($this->model->getListRelations(), [
+			'validationRules' => 'rule'
+		]);
 	}
 }

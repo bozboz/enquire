@@ -34,7 +34,7 @@
             <td>
                 @foreach ($form->fields as $field)
                     @if (array_key_exists($field->name, $input))
-                        <p style="{{ $font }}"><strong>{!! $field->label !!}:</strong> {!! $field->formatInputForEmail($input[$field->name]) !!}</p>
+                        <p style="{{ $font }}"><strong>{!! $field->label !!}:</strong> {!! $field->formatInputForEmail($input) !!}</p>
                     @endif
                 @endforeach
             </td>

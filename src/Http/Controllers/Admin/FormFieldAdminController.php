@@ -43,6 +43,14 @@ class FormFieldAdminController extends ModelAdminController
 		return $this->renderFormFor($instance, $this->createView, 'POST', 'store');
 	}
 
+    protected function save($modelInstance, $input)
+    {
+        $modelInstance->fill($input);
+        $modelInstance->save();
+        $this->decorator->setType($input['input_type'])->updateRelations($modelInstance, $input);
+        $modelInstance->saveOptionFields($input);
+    }
+
 	protected function getReportActions()
 	{
 		return [
