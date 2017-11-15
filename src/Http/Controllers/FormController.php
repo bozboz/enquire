@@ -88,25 +88,7 @@ class FormController extends Controller
 		$form->load('fields.validationRules');
 
 		foreach ($form->fields as $field) {
-			$rules = collect();
-
-			if ($field->required) {
-				$rules->push('required');
-			}
-
-			$field->validationRules->each(function($validation) use ($rules) {
-				$rules->push($validation->rule);
-			});
-
-			if ($rules->count()) {
-				if (array_key_exists($field->name, $input) && is_array($input[$field->name])) {
-					foreach ($input[$field->name] as $name => $value) {
-						$validationRules["{$field->name}.{$name}"] = $rules->implode('|');
-					}
-				} else {
-					$validationRules[$field->name] = $rules->implode('|');
-				}
-			}
+			$validationRules = array_merge($validationRules, $field->getValidation($input));
 		}
 
 		return $validationRules;

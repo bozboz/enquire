@@ -92,6 +92,32 @@ class Field extends Model implements Sortable
         return false;
     }
 
+    public function getValidation($input)
+    {
+        $rules = collect();
+        $validationRules = [];
+
+        if ($this->required) {
+            $rules->push('required');
+        }
+
+        $this->validationRules->each(function($validation) use ($rules) {
+            $rules->push($validation->rule);
+        });
+
+        if ($rules->count()) {
+            if (array_key_exists($this->name, $input) && is_array($input[$this->name])) {
+                foreach ($input[$this->name] as $name => $value) {
+                    $validationRules["{$this->name}.{$name}"] = $rules->implode('|');
+                }
+            } else {
+                $validationRules[$this->name] = $rules->implode('|');
+            }
+        }
+
+        return $validationRules;
+    }
+
     public function validationRules()
     {
         return $this->belongsToMany(Rule::class, 'enquiry_form_field_validation')->withTimestamps();
@@ -114,6 +140,9 @@ class Field extends Model implements Sortable
 
     public function formatInputForLog($input)
     {
+        if ( ! key_exists($this->name, $input)) {
+            return '';
+        }
         return trim(implode(', ', (array)$input[$this->name]));
     }
 
