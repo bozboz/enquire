@@ -2,6 +2,7 @@
 
 # Version 3.0.0 (Future)
 - Smarter field models
+- Add validation to prevent duplicate field names on a single form
 
 ## Version 2.11.2 (2017-10-31)
 - Fix checkbox view
