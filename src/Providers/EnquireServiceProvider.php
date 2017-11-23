@@ -8,6 +8,7 @@ use Illuminate\Foundation\AliasLoader;
 use Bozboz\Enquire\Forms\FormInterface;
 use Illuminate\Support\ServiceProvider;
 use Bozboz\Enquire\Forms\FormRepository;
+use Bozboz\Enquire\Forms\Fields\FileUpload;
 use Bozboz\Enquire\Forms\Fields\FieldMapper;
 use Bozboz\Enquire\Forms\FormRepositoryInterface;
 
@@ -58,6 +59,10 @@ class EnquireServiceProvider extends ServiceProvider
 
     protected function registerFields()
     {
+        $this->app['EnquireFieldMapper']->register([
+            'file_upload' => new FileUpload
+        ]);
+
         collect(config('enquire.fields'))->each(function($view, $type) {
             $this->app['EnquireFieldMapper']->register($type, (new Field([
                 'input_type' => $type,
