@@ -123,17 +123,6 @@ class Form extends Model implements FormInterface
 			->pluck('label')->all();
 	}
 
-	public function getFileInputs()
-	{
-		$fileInputs = [];
-		foreach ($this->fields as $field) {
-			if (array_search($field->input_type, Config::get('enquire.fields')) == 'file_upload') {
-				$fileInputs[] = $field;
-			}
-		}
-		return $fileInputs;
-	}
-
 	public function fields()
 	{
 		return $this->hasMany(Field::class)->orderBy('sorting');

@@ -48,9 +48,8 @@ class FormController extends Controller
 
 		$this->validate($this->request, $this->getValidationRules($form, $input));
 
-		$fileInputs = $form->getFileInputs();
-		if ($fileInputs) {
-			$input = $this->uploadFiles($form, $fileInputs, $input);
+		if ($this->request->files) {
+			$input = $this->uploadFiles($form, $this->request->files, $input);
 		}
 
 		if ($form->newsletter_signup) {
@@ -112,15 +111,14 @@ class FormController extends Controller
 		throw FormException::noSignup();
 	}
 
-	protected function uploadFiles(FormInterface $form, array $fields, array $input)
+	protected function uploadFiles(FormInterface $form, $files, array $input)
 	{
 		$formStorage = 'uploads/'.str_slug($form->name);
-		foreach ($fields as $field) {
-			$file = $this->request->file($field->name);
-			if ($file) {
+		foreach ($files as $fieldName => $file) {
+			if ($form->fields->where('name', $fieldName)->first()) {
 				$filename = time() . '-' . str_replace(' ', '-', $file->getClientOriginalName());
 				$file->move(public_path($formStorage), $filename);
-				$input[$field->name] = url($formStorage . '/' . $filename);
+				$input[$fieldName] = url($formStorage . '/' . $filename);
 			}
 		}
 

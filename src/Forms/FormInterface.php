@@ -14,8 +14,6 @@ interface FormInterface
 
 	public function getHtmlIdAttribute();
 
-	public function getFileInputs();
-
 	public function fields();
 
 	public function paths();
