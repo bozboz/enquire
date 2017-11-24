@@ -4,7 +4,6 @@ return [
     'fields' => [
         'checkbox'      => 'enquire::partials.checkbox',
         'dropdown'      => 'enquire::partials.dropdown',
-        'email'         => 'enquire::partials.email',
         'phone'         => 'enquire::partials.phone',
         'radio_buttons' => 'enquire::partials.radios',
         'text'          => 'enquire::partials.text',
