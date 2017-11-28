@@ -19,6 +19,7 @@ return [
     'from_address' => '',
 
     'mailchimp_api_key' => '',
+    'mailchimp_double_opt_in' => true,
 
     'forms_by_path_enabled' => false,
     'newsletter_signup_enabled' => false,

@@ -21,7 +21,9 @@ class MailchimpFormController extends FormController
 			$api->lists->subscribe(
 				$form->list_id,
 				$this->getEmail(),
-				$this->getMergeVars()
+				$this->getMergeVars(),
+				'html',
+				Config::get('enquire.mailchimp_double_opt_in')
 			);
 		} catch (Mailchimp_List_AlreadySubscribed $e) {
 			throw new SignupException($e->getMessage());
