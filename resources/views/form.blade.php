@@ -8,6 +8,13 @@
                 </div><!--
             @endif
 
+            @if ( ! $errors->isEmpty())
+             --><div class="form__error">
+                    <p><strong>There are errors in your submission. </strong></p>
+                    <p>Please refer to the errors in the form and try again.</p>
+                </div><!--
+            @endif
+
          -->{{ Form::open(['route' => 'process-enquiry', 'files' => true, 'class' => 'js-form']) }}<!--
              -->{!! Honeypot::generate('my_name', 'my_time') !!}<!--
              -->{{ Form::hidden('form_id', $form->id) }}<!--
