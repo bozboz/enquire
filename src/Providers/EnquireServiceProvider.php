@@ -61,6 +61,7 @@ class EnquireServiceProvider extends ServiceProvider
         $this->app['EnquireFieldMapper']->register([
             'file_upload' => new \Bozboz\Enquire\Forms\Fields\FileUpload,
             'email'       => new \Bozboz\Enquire\Forms\Fields\Email,
+            'dropdown'    => new \Bozboz\Enquire\Forms\Fields\Dropdown,
         ]);
 
         collect(config('enquire.fields'))->each(function($view, $type) {

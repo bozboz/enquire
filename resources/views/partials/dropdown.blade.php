@@ -1,7 +1,7 @@
 {{ Form::label($field->name, $field->label.($field->required ? ' *' : '')) }}
 {!! Form::select(
     $field->name,
-    ['' => '- Please Select -'] + array_combine(explode("\n", $field->options), explode("\n", $field->options)),
+    $field->getSelectOptions(),
     null,
     array_filter([
         'class' => 'form__input',
