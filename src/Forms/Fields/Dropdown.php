@@ -2,6 +2,8 @@
 
 namespace Bozboz\Enquire\Forms\Fields;
 
+use Bozboz\Admin\Fields\TextareaField;
+
 class Dropdown extends Field
 {
     protected $view = 'enquire::partials.dropdown';
@@ -16,5 +18,14 @@ class Dropdown extends Field
             ];
         });
         return $options->pluck('label', 'value')->prepend('- Please Select -', '');
+    }
+
+    public function getOptionFields()
+    {
+        return [
+            new TextareaField('options', [
+                'help_text' => 'Enter options a new line between each one'
+            ])
+        ];
     }
 }
