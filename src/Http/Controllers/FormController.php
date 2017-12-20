@@ -48,10 +48,6 @@ class FormController extends Controller
 
 		$this->validate($this->request, $this->getValidationRules($form, $input));
 
-		if ($this->request->files) {
-			$input = $this->uploadFiles($form, $this->request->files, $input);
-		}
-
 		if ($form->newsletter_signup) {
 			try {
 				$this->newsletterSignUp($form);
@@ -60,14 +56,14 @@ class FormController extends Controller
 			}
 		}
 
+		$this->logSubmission($form, $input);
+
 		$recipients = array_filter(explode(',', $form->recipients));
 		if ($recipients) {
 			$this->sendMail($form, $input, $recipients);
 		}
 
 		Event::fire(new SuccessfulFormSubmission($form, $input, $recipients));
-
-		$this->logSubmission($form, $input);
 
 		$response = $this->getSuccessResponse($form);
 
@@ -111,20 +107,6 @@ class FormController extends Controller
 		throw FormException::noSignup();
 	}
 
-	protected function uploadFiles(FormInterface $form, $files, array $input)
-	{
-		$formStorage = 'uploads/'.str_slug($form->name);
-		foreach ($files as $fieldName => $file) {
-			if ($form->fields->where('name', $fieldName)->first()) {
-				$filename = time() . '-' . str_replace(' ', '-', $file->getClientOriginalName());
-				$file->move(public_path($formStorage), $filename);
-				$input[$fieldName] = url($formStorage . '/' . $filename);
-			}
-		}
-
-		return $input;
-	}
-
 	protected function sendMail(FormInterface $form, array $input, array $recipients)
 	{
 		$this->mailer->send($this->getEmailTemplate($form), compact('form', 'input'), function($message) use ($form, $input, $recipients){
@@ -154,6 +136,8 @@ class FormController extends Controller
 		$submission->save();
 
 		$submission->logFields($form->fields, $input);
+
+		return $submission;
 	}
 
 	protected function getSuccessResponse(FormInterface $form)
