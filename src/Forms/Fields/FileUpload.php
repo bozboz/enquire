@@ -10,7 +10,7 @@ class FileUpload extends Field
 
     public function logValue($submission, $input)
     {
-        $value = $this->uploadFile($input[$this->name]);
+        $value = $this->uploadFile($this->getFile($input));
 
         $value = new Value([
             'label' => $this->label,
@@ -22,13 +22,21 @@ class FileUpload extends Field
 
     public function formatInputForEmail($input)
     {
-        $file = $input[$this->name];
+        $file = $this->getFile($input);
 
         if ( ! $file) {
             return;
         }
 
         return link_to(url($this->getStoragePath() . '/' . $this->getFilename($file)));
+    }
+
+    protected function getFile($input)
+    {
+        if ( ! key_exists($this->name, $input)) {
+            return false;
+        }
+        return $input[$this->name];
     }
 
     protected function getStoragePath()
