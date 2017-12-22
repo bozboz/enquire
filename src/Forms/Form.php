@@ -19,6 +19,7 @@ class Form extends Model implements FormInterface
 		'name',
 		'newsletter_signup',
 		'recipients',
+		'subject',
 		'confirmation_message',
 		'description',
 		'status',
@@ -57,6 +58,21 @@ class Form extends Model implements FormInterface
 	public function wasSubmitted()
 	{
 		return Session::get($this->getSessionHandle());
+	}
+
+	public function getSubject($input)
+	{
+		if ($this->subject) {
+			$placeholders = $this->fields->map(function($field) use ($input) {
+				return [
+					'value' => key_exists($field->name, $input) ? $input[$field->name] : null,
+					'placeholder' => '{{' . $field->label . '}}',
+				];
+			})->pluck('value', 'placeholder')->prepend($this->name, '{{Form Name}}')->all();
+
+			return str_replace(array_keys($placeholders), $placeholders, $this->subject);
+		}
+	    return $this->name.' form submission';
 	}
 
 	public function getSessionHandle()

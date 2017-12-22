@@ -67,6 +67,10 @@ class FormDecorator extends ModelAdminDecorator
 				'name' => 'recipients',
 				'help_text' => 'Comma separated list of email addresses you wish form submissions to be sent to.',
 			]),
+			new TextField([
+				'name' => 'subject',
+				'help_text' => $this->getSubjectFieldHelpText($instance),
+			]),
 			config('enquire.forms_by_path_enabled') ? new TextareaField([
 				'name' => 'page_list',
 				'help_text_title' => 'Paste all the URLs you wish this form to display on separated by a new line.',
@@ -81,5 +85,42 @@ class FormDecorator extends ModelAdminDecorator
 				'help_text' => 'This text will show when the form is submitted.',
 			])
 		];
+	}
+
+	protected function getSubjectFieldHelpText($instance)
+	{
+		$placeholders = $instance->fields->map(function($field) {
+			return '<li>{{' . $field->label . '}}</li>';
+		})->implode('');
+	    return <<<HTML
+	    	Placeholders may be used to add content from the user's submission to the subject line.<br>
+	    	Placeholders are the field's name surrounded by 2 curly braces. <br>
+	    	e.g. The placeholder for a field called: "First Name" would be: "{{First Name}}"<br>
+	    	<!-- Button trigger modal -->
+	    	<a data-toggle="modal" data-target="#myModal" href="#">
+	    	  View available placeholders »
+	    	</a>
+
+	    	<!-- Modal -->
+	    	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	    	  <div class="modal-dialog" role="document">
+	    	    <div class="modal-content">
+	    	      <div class="modal-header">
+	    	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+	    	        <h4 class="modal-title" id="myModalLabel">Available Placeholders</h4>
+	    	      </div>
+	    	      <div class="modal-body">
+	    	        <ul>
+		    	      <li>{{Form Name}}</li>
+	    	          {$placeholders}
+	    	        </ul>
+	    	      </div>
+	    	      <div class="modal-footer">
+	    	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	    	      </div>
+	    	    </div>
+	    	  </div>
+	    	</div>
+HTML;
 	}
 }

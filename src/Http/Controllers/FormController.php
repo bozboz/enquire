@@ -124,7 +124,7 @@ class FormController extends Controller
 	protected function sendMail(FormInterface $form, array $input, array $recipients)
 	{
 		$this->mailer->send($this->getEmailTemplate($form), compact('form', 'input'), function($message) use ($form, $input, $recipients){
-			$message->subject($form->name.' form submission');
+			$message->subject($form->getSubject($input));
 			foreach($recipients as $recipient) {
 				$message->to(trim($recipient));
 			}
