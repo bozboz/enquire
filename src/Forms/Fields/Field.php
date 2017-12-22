@@ -72,6 +72,11 @@ class Field extends Model implements Sortable
         return 'sorting';
     }
 
+    public function isRecipient()
+    {
+        return false;
+    }
+
     public function getNameAttribute()
     {
         return trim(preg_replace('/[^\w]+/', '_', (strtolower($this->label))), trim('_'));

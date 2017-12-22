@@ -2,22 +2,23 @@
 
 namespace Bozboz\Enquire\Http\Controllers;
 
-use Bozboz\Enquire\Events\SuccessfulFormSubmission;
-use Bozboz\Enquire\Exceptions\FormException;
-use Bozboz\Enquire\Exceptions\SignupException;
-use Bozboz\Enquire\Forms\FormInterface;
-use Bozboz\Enquire\Forms\FormRepositoryInterface;
-use Bozboz\Enquire\Submissions\Submission;
-use Bozboz\Enquire\Submissions\Value;
 use Event;
-use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\URL;
+use Bozboz\Enquire\Submissions\Value;
+use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Support\Facades\Config;
+use Bozboz\Enquire\Forms\FormInterface;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\URL;
+use Bozboz\Enquire\Submissions\Submission;
+use Bozboz\Enquire\Exceptions\FormException;
+use Bozboz\Enquire\Exceptions\SignupException;
+use Bozboz\Enquire\Forms\FormRepositoryInterface;
+use Bozboz\Enquire\Events\SuccessfulFormSubmission;
+use Bozboz\Enquire\Forms\Fields\Contracts\Recipients;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class FormController extends Controller
 {
@@ -58,7 +59,7 @@ class FormController extends Controller
 
 		$this->logSubmission($form, $input);
 
-		$recipients = array_filter(explode(',', $form->recipients));
+		$recipients = $this->getRecipients($form, $input);
 		if ($recipients) {
 			$this->sendMail($form, $input, $recipients);
 		}
@@ -105,6 +106,19 @@ class FormController extends Controller
 	protected function newsletterSignUp($form)
 	{
 		throw FormException::noSignup();
+	}
+
+	protected function getRecipients($form, $input)
+	{
+		$recipientFields = $form->fields->filter(function($field) use ($input) {
+			return $field instanceof Recipients
+				&& key_exists($field->name, $input);
+		})->map(function($field) use ($input) {
+			return $field->getRecipients($input);
+		})->flatMap(function($options) {
+            return $options;
+        });
+	    return $recipientFields->merge(array_filter(explode(',', $form->recipients)))->all();
 	}
 
 	protected function sendMail(FormInterface $form, array $input, array $recipients)

@@ -62,6 +62,7 @@ class EnquireServiceProvider extends ServiceProvider
             'file_upload' => new \Bozboz\Enquire\Forms\Fields\FileUpload,
             'email'       => new \Bozboz\Enquire\Forms\Fields\Email,
             'dropdown'    => new \Bozboz\Enquire\Forms\Fields\Dropdown,
+            'recipient-dropdown' => new \Bozboz\Enquire\Forms\Fields\RecipientDropdown,
         ]);
 
         collect(config('enquire.fields'))->each(function($view, $type) {

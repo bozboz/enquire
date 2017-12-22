@@ -10,14 +10,18 @@ class Dropdown extends Field
 
     public function getSelectOptions()
     {
-        $options = collect(explode(PHP_EOL, $this->options))->map(function($option) {
+        return $this->decodeOptions()->pluck('label', 'value')->prepend('- Please Select -', '');
+    }
+
+    protected function decodeOptions()
+    {
+        return collect(explode(PHP_EOL, $this->options))->map(function($option) {
             @list($value, $label) = explode('=>', $option);
             return [
                 'label' => trim($label ?: $value),
                 'value' => trim($value),
             ];
         });
-        return $options->pluck('label', 'value')->prepend('- Please Select -', '');
     }
 
     public function getOptionFields()
