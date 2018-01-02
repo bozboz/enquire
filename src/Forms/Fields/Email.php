@@ -3,8 +3,9 @@
 namespace Bozboz\Enquire\Forms\Fields;
 
 use Bozboz\Admin\Fields\CheckboxField;
+use Bozboz\Enquire\Forms\Fields\Contracts\ReplyTo;
 
-class Email extends Field
+class Email extends Field implements ReplyTo
 {
     protected $view = 'enquire::partials.email';
 
@@ -37,5 +38,14 @@ class Email extends Field
     public function getFillable()
     {
         return array_merge(parent::getFillable(), ['options_array']);
+    }
+
+    public function getReplyToAddress($input)
+    {
+        if ( ! $this->options->reply_to || empty($input[$this->name])) {
+            return null;
+        }
+
+        return [$input[$this->name]];
     }
 }

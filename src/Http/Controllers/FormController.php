@@ -128,10 +128,8 @@ class FormController extends Controller
 			foreach($recipients as $recipient) {
 				$message->to(trim($recipient));
 			}
-			$form->fields->filter(function($field) {
-				return is_object($field->options) && property_exists($field->options, 'reply_to') && $field->options->reply_to;
-			})->each(function($field) use ($message, $input) {
-				$message->replyTo($input[$field->name]);
+			$form->getReplyToAddress($input)->each(function($address) use ($message) {
+				$message->replyTo($address);
 			});
 		});
 	}

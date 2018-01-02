@@ -3,13 +3,14 @@
 namespace Bozboz\Enquire\Forms;
 
 use Bozboz\Admin\Base\Model;
-use Bozboz\Enquire\Forms\Fields\Field;
-use Bozboz\Enquire\Forms\FormInterface;
 use Bozboz\Enquire\Forms\Paths\Path;
-use Bozboz\Enquire\Submissions\Submission;
+use Bozboz\Enquire\Forms\Fields\Field;
 use Illuminate\Support\Facades\Config;
+use Bozboz\Enquire\Forms\FormInterface;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
+use Bozboz\Enquire\Submissions\Submission;
+use Bozboz\Enquire\Forms\Fields\Contracts\ReplyTo;
 
 class Form extends Model implements FormInterface
 {
@@ -137,6 +138,15 @@ class Form extends Model implements FormInterface
 			->groupBy('label')
 			->orderBy('enquiry_submission_values.created_at', 'ASC')
 			->pluck('label')->all();
+	}
+
+	public function getReplyToAddress($input)
+	{
+		return $this->fields->filter(function($field) {
+			return $field instanceof ReplyTo;
+		})->map(function($field) use ($input) {
+			return $field->getReplyToAddress($input);
+		})->flatten()->filter();
 	}
 
 	public function fields()
