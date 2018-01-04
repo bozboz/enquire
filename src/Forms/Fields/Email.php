@@ -42,7 +42,7 @@ class Email extends Field implements ReplyTo
 
     public function getReplyToAddress($input)
     {
-        if ( ! $this->options->reply_to || empty($input[$this->name])) {
+        if ( empty($this->options->reply_to) || empty($input[$this->name])) {
             return null;
         }
 
