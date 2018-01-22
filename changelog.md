@@ -1,6 +1,6 @@
 # Bozboz Forms Package Changelog
 
-# Version 3.0.0 (Future)
+# Version 3.0.0 (2018-01-22)
 - Smarter field models
 - Add validation to prevent duplicate field names on a single form
 

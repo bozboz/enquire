@@ -22,4 +22,5 @@ return [
 
     'forms_by_path_enabled' => false,
     'newsletter_signup_enabled' => false,
+    'allow_multiple_forms_per_page' => false,
 ];

@@ -94,8 +94,11 @@ class Form extends Model implements FormInterface
 				'enquiry_form_paths',
 				'enquiry_form_paths.form_id', '=', 'enquiry_forms.id'
 			)->whereRaw(sprintf("'%s' like replace(`enquiry_form_paths`.`path`, '*', '%%')", $path))
-			->orderByRaw('length(`enquiry_form_paths`.`path`) desc')
-			->limit(1);
+			->orderByRaw('length(`enquiry_form_paths`.`path`) desc');
+
+		if ( ! Config::get('enquire.allow_multiple_forms_per_page')) {
+			$query->limit(1);
+		}
 	}
 
 	protected function cleanPath($path)
