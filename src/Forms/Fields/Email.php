@@ -27,11 +27,17 @@ class Email extends Field implements ReplyTo
 
     public function getOptionsAttribute()
     {
+        if ( ! key_exists('options', $this->attributes)) {
+            return null;
+        }
         return json_decode($this->attributes['options']);
     }
 
     public function getOptionsArrayAttribute()
     {
+        if ( ! key_exists('options', $this->attributes)) {
+            return null;
+        }
         return json_decode($this->attributes['options']);
     }
 

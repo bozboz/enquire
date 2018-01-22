@@ -1,6 +1,9 @@
 # Bozboz Forms Package Changelog
 
-# Version 3.0.0 (2018-01-22)
+## Version 3.0.1 (2018-01-22)
+- Fix email field options
+
+## Version 3.0.0 (2018-01-22)
 - Smarter field models
 - Add validation to prevent duplicate field names on a single form
 
