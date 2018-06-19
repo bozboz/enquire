@@ -6,6 +6,7 @@ use Bozboz\Enquire\Submissions\Value;
 
 class FileUpload extends Field
 {
+    private $filename;
     protected $view = 'enquire::partials.file';
 
     public function logValue($submission, $input)
@@ -46,7 +47,12 @@ class FileUpload extends Field
 
     protected function getFilename($file)
     {
-        return time() . '-' . str_replace(' ', '-', $file->getClientOriginalName());
+        if (isset($this->filename)) {
+            return $this->filename;
+        } else {
+            $this->filename = time() . '-' . str_replace(' ', '-', $file->getClientOriginalName());
+            return $this->filename;
+        }
     }
 
     protected function uploadFile($file)
