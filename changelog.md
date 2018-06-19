@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 3.0.2 (2018-06-19)
+- Fix FileUpload filename issue
+
 ## Version 3.0.1 (2018-01-22)
 - Fix email field options
 
