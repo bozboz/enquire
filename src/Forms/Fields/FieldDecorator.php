@@ -3,11 +3,6 @@
 namespace Bozboz\Enquire\Forms\Fields;
 
 use Bozboz\Admin\Base\ModelAdminDecorator;
-use Bozboz\Admin\Fields\BelongsToManyField;
-use Bozboz\Admin\Fields\CheckboxField;
-use Bozboz\Admin\Fields\HiddenField;
-use Bozboz\Admin\Fields\TextField;
-use Bozboz\Admin\Fields\TextareaField;
 use Bozboz\Admin\Reports\Filters\ArrayListingFilter;
 use Bozboz\Admin\Reports\Filters\HiddenFilter;
 use Bozboz\Admin\Reports\Filters\RelationFilter;
@@ -16,12 +11,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class FieldDecorator extends ModelAdminDecorator
 {
-	private $rules;
-
-	public function __construct(Field $model, Validation\RuleDecorator $rules)
+	public function __construct(Field $model)
 	{
 		parent::__construct($model);
-		$this->rules = $rules;
 	}
 
 	public function getLabel($instance)
@@ -47,19 +39,7 @@ class FieldDecorator extends ModelAdminDecorator
 
 	public function getFields($instance)
 	{
-		return array_merge([
-			new HiddenField(['name' => 'input_type']),
-			new TextField(['name' => 'type_label', 'disabled' => 'disabled']),
-			new TextField(['name' => 'label', 'label' => 'Name']),
-			new TextField(['name' => 'placeholder']),
-			new CheckboxField(['name' => 'required']),
-			new BelongsToManyField($this->rules, $instance->validationRules(), [
-				'key' => 'rule',
-				'data-tags' => 'true',
-				'help_text' => '<a href="https://laravel.com/docs/5.2/validation#available-validation-rules" target="_blank">See list of available validation rules.</a>',
-			]),
-			new HiddenField(['name' => 'form_id']),
-		], $instance->getOptionFields());
+		return array_merge($instance->getDefaultFields(), $instance->getOptionFields());
 	}
 
 	public function setType($inputType)

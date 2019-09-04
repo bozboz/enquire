@@ -4,10 +4,14 @@ namespace Bozboz\Enquire\Forms\Fields;
 
 use Bozboz\Admin\Base\Model;
 use Bozboz\Enquire\Forms\Form;
+use Bozboz\Admin\Fields\TextField;
+use Bozboz\Admin\Fields\HiddenField;
 use Bozboz\Enquire\Submissions\Value;
+use Bozboz\Admin\Fields\CheckboxField;
 use Bozboz\Admin\Fields\TextareaField;
 use Illuminate\Support\Facades\Config;
 use Bozboz\Admin\Base\Sorting\Sortable;
+use Bozboz\Admin\Fields\BelongsToManyField;
 use Bozboz\Admin\Base\Sorting\SortableTrait;
 use Bozboz\Enquire\Forms\Fields\FieldMapper;
 use Bozboz\Enquire\Forms\Fields\Validation\Rule;
@@ -18,14 +22,9 @@ class Field extends Model implements Sortable
 
     protected $table = 'enquiry_form_fields';
 
-    protected $fillable = [
-        'form_id',
-        'label',
-        'input_type',
-        'placeholder',
-        'help_text',
-        'required',
-        'options',
+    protected $guarded = [
+        'id',
+        'validationRules_relationship',
     ];
 
     protected $nullable = [
@@ -89,7 +88,7 @@ class Field extends Model implements Sortable
 
     public function getTypeLabelAttribute()
     {
-        return studly_case($this->input_type);
+        return $this->getDescriptiveName();
     }
 
     protected function sortPrependOnCreate()
@@ -159,6 +158,39 @@ class Field extends Model implements Sortable
     public function getDescriptiveName()
     {
         return preg_replace('/([A-Z])/', ' $1', studly_case($this->input_type));
+    }
+
+    public function getDefaultFields()
+    {
+        return [
+            new HiddenField(['name' => 'input_type']),
+            new TextField(['name' => 'type_label', 'disabled' => 'disabled']),
+            new TextField(['name' => 'label', 'label' => 'Name']),
+            new TextField(['name' => 'placeholder']),
+            new CheckboxField(['name' => 'required']),
+            new BelongsToManyField(app(Validation\RuleDecorator::class), $this->validationRules(), [
+                'key' => 'rule',
+                'data-tags' => 'true',
+                'help_text' => '
+                <p>Type the name of a validation rule and press the enter key to add it.<br>
+                Available rules:</p>
+                <p>
+                <strong>min:value</strong><br>
+                Minimum text length
+                </p>
+                <p>
+                <strong>max:value</strong><br>
+                Maximum text length
+                </p>
+                <p>
+                <strong>email</strong><br>
+                Value must be a valid email address
+                </p>
+                <a href="https://laravel.com/docs/5.2/validation#available-validation-rules" target="_blank">See list of available validation rules.</a>
+                ',
+            ]),
+            new HiddenField(['name' => 'form_id']),
+        ];
     }
 
     public function getOptionFields()

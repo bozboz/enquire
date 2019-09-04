@@ -1,5 +1,9 @@
 # Bozboz Forms Package Changelog
 
+## Version 3.1.0 (2019-09-04)
+- Add multiple checkbox field
+- Update validation field help text
+
 ## Version 3.0.2 (2018-06-19)
 - Fix FileUpload filename issue
 
