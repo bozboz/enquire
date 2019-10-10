@@ -36,7 +36,6 @@ class EnquireServiceProvider extends ServiceProvider
         $this->definePermissions();
         $this->adminMenu();
         $this->jamFields();
-
     }
 
     protected function loadConfig()
