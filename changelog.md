@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 3.1.1 (2019-10-10)
+- Fix dropdown options
+
 ## Version 3.1.0 (2019-09-04)
 - Add multiple checkbox field
 - Update validation field help text
