@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 3.1.2 (2019-12-03)
+- Fix radios options
+
 ## Version 3.1.1 (2019-10-10)
 - Fix dropdown options
 
