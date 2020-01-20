@@ -41,11 +41,6 @@ class Email extends Field implements ReplyTo
         return json_decode($this->attributes['options']);
     }
 
-    public function getFillable()
-    {
-        return array_merge(parent::getFillable(), ['options_array']);
-    }
-
     public function getReplyToAddress($input)
     {
         if ( empty($this->options->reply_to) || empty($input[$this->name])) {
