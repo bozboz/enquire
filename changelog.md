@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 3.1.3 (2020-01-20)
+- Remove fillable from email field
+
 ## Version 3.1.2 (2019-12-03)
 - Fix radios options
 
