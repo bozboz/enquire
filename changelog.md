@@ -1,5 +1,8 @@
 # Bozboz Forms Package Changelog
 
+## Version 3.1.4 (2020-01-21)
+- Fix SQL injection vulnerability
+
 ## Version 3.1.3 (2020-01-20)
 - Remove fillable from email field
 
