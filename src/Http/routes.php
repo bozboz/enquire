@@ -24,6 +24,14 @@ Route::group(['middleware' => 'web', 'prefix' => 'admin', 'namespace' => 'Bozboz
         'uses' => 'FormSubmissionAdminController@downloadReport',
         'as' => 'admin.enquiry-form-submissions.download-report',
     ]);
+    Route::post('enquiry-form-submissions/bulk-delete', [
+        'uses' => 'FormSubmissionAdminController@bulkDelete',
+        'as' => 'admin.enquiry-form-submissions.bulk-delete',
+    ]);
+    Route::post('enquiry-form-submissions/delete-all', [
+        'uses' => 'FormSubmissionAdminController@deleteAll',
+        'as' => 'admin.enquiry-form-submissions.delete-all',
+    ]);
 });
 
 Route::group(['middleware' => 'web', 'namespace' => 'Bozboz\Enquire\Http\Controllers'], function()

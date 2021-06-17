@@ -2,18 +2,23 @@
 
 namespace Bozboz\Enquire\Http\Controllers\Admin;
 
+use Bozboz\Admin\Http\Controllers\BulkAdminController;
 use Bozboz\Admin\Http\Controllers\ModelAdminController;
 use Bozboz\Admin\Reports\Actions\Permissions\IsValid;
 use Bozboz\Admin\Reports\Actions\Presenters\Link;
 use Bozboz\Admin\Reports\Actions\Presenters\Urls\Custom;
+use Bozboz\Admin\Reports\Actions\Presenters\Urls\Route;
 use Bozboz\Admin\Reports\Actions\Presenters\Urls\Url;
 use Bozboz\Admin\Reports\CSVReport;
 use Bozboz\Admin\Reports\Report;
 use Bozboz\Enquire\Forms\Form;
+use Bozboz\Enquire\Submissions\Submission;
 use Bozboz\Enquire\Submissions\SubmissionDecorator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Request;
+use Bozboz\Permissions\RuleStack;
 
-class FormSubmissionAdminController extends ModelAdminController
+class FormSubmissionAdminController extends BulkAdminController
 {
 	protected $useActions = true;
 
@@ -53,8 +58,50 @@ class FormSubmissionAdminController extends ModelAdminController
 				]),
 				new IsValid([$forms, 'canView'])
 			),
+			$this->actions->custom(
+				new \Bozboz\Admin\Reports\Actions\Presenters\Form(new Route('admin.enquiry-form-submissions.bulk-delete'), 'Delete Selected', 'fa fa-trash', [
+				    'class' => 'btn-sm btn-warning',
+                    'data-warn' => 'Are you sure you want to delete the selected submissions',
+                ], [
+                    'class' => 'pull-right space-left js-bulk-update',
+                ]),
+				new IsValid([$this, 'canBulkDestroy'])
+			),
+			$this->actions->custom(
+				new \Bozboz\Admin\Reports\Actions\Presenters\Form(new Route('admin.enquiry-form-submissions.delete-all'), 'Delete All', 'fa fa-trash', [
+				    'class' => 'btn-sm btn-danger',
+                    'data-warn' => 'Are you sure you want to delete all submissions',
+                ], [
+                    'class' => 'pull-right space-left js-bulk-update',
+                ]),
+				new IsValid([$this, 'canBulkDestroy'])
+			)
 		];
 	}
+
+    protected function getSuccessResponse($instance)
+    {
+		return redirect()->action($this->getActionName('index'), ['form' => $instance->form_id]);
+    }
+
+    public function bulkDelete()
+    {
+        parse_str(parse_url(url()->previous(), PHP_URL_QUERY), $query);
+        Submission::whereIn('id', request()->instances)->delete();
+        return $this->getSuccessResponse((object)['form_id' => Arr::get($query, 'form')]);
+    }
+
+    public function deleteAll()
+    {
+        parse_str(parse_url(url()->previous(), PHP_URL_QUERY), $query);
+        $formId = Arr::get($query, 'form');
+        if ($formId) {
+            Submission::whereFormId($formId)->delete();
+        } else {
+            Submission::query()->delete();
+        }
+        return $this->getSuccessResponse((object)['form_id' => $formId]);
+    }
 
 	protected function getRowActions()
 	{
@@ -105,6 +152,16 @@ class FormSubmissionAdminController extends ModelAdminController
 	{
 		return $this->canView() && Request::get('form');
 	}
+
+	public function canBulkDestroy()
+	{
+		$stack = new RuleStack;
+
+		$stack->add('delete_anything');
+
+		$this->deletePermissions($stack, null);
+
+		return $stack->isAllowed();	}
 
 	public function viewPermissions($stack)
 	{

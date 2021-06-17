@@ -2,6 +2,7 @@
 
 namespace Bozboz\Enquire\Submissions;
 
+use Bozboz\Admin\Base\BulkAdminDecorator;
 use Bozboz\Admin\Base\ModelAdminDecorator;
 use Bozboz\Admin\Fields\BelongsToManyField;
 use Bozboz\Admin\Fields\CheckboxField;
@@ -18,7 +19,7 @@ use DateTime, Link;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
 
-class SubmissionDecorator extends ModelAdminDecorator implements Downloadable
+class SubmissionDecorator extends BulkAdminDecorator implements Downloadable
 {
 	private $forms;
 
@@ -109,4 +110,9 @@ class SubmissionDecorator extends ModelAdminDecorator implements Downloadable
 
 		return $keys;
 	}
+
+    public function getBulkFields($instances)
+    {
+        return [];
+    }
 }

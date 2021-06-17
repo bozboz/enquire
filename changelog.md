@@ -1,4 +1,8 @@
+
 # Bozboz Forms Package Changelog
+
+## Version 3.2.0 (2021-06-18)
+- Add bulk delete for submissions
 
 ## Version 3.1.4 (2020-01-21)
 - Fix SQL injection vulnerability
