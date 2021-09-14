@@ -1,6 +1,9 @@
 
 # Bozboz Forms Package Changelog
 
+## Version 3.3.0 (2021-09-14)
+- Add text label field
+
 ## Version 3.2.2 (2021-09-14)
 - Fix checkboxes field required state
 

@@ -5,7 +5,7 @@
 @endphp
 <fieldset>
     <legend>{{ $field->label.($field->required ? ' *' : '') }}</legend>
-    @if ( ! $field->required)
+    @if ( ! $field->required && ! old($field->name))
         {{ Form::hidden($field->name, 'None chosen', ['id' => '']) }}
     @endif
 
