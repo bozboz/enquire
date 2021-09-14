@@ -1,6 +1,9 @@
 
 # Bozboz Forms Package Changelog
 
+## Version 3.2.1 (2021-09-14)
+- Use field class for checkboxes field
+
 ## Version 3.2.0 (2021-06-18)
 - Add bulk delete for submissions
 

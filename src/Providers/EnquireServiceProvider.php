@@ -2,6 +2,8 @@
 
 namespace Bozboz\Enquire\Providers;
 
+use Bozboz\Enquire\Forms\Fields\Checkboxes;
+use Bozboz\Enquire\Forms\Fields\Radios;
 use Bozboz\Enquire\Forms\Form;
 use Bozboz\Enquire\Forms\Fields\Field;
 use Illuminate\Foundation\AliasLoader;
@@ -57,18 +59,19 @@ class EnquireServiceProvider extends ServiceProvider
 
     protected function registerFields()
     {
-        $this->app['EnquireFieldMapper']->register([
-            'file_upload' => new \Bozboz\Enquire\Forms\Fields\FileUpload,
-            'email'       => new \Bozboz\Enquire\Forms\Fields\Email,
-            'dropdown'    => new \Bozboz\Enquire\Forms\Fields\Dropdown,
-            'recipient-dropdown' => new \Bozboz\Enquire\Forms\Fields\RecipientDropdown,
-        ]);
-
         collect(config('enquire.fields'))->each(function($view, $type) {
             $this->app['EnquireFieldMapper']->register($type, (new Field([
                 'input_type' => $type,
             ]))->setView($view));
         });
+        $this->app['EnquireFieldMapper']->register([
+            'file_upload' => new \Bozboz\Enquire\Forms\Fields\FileUpload,
+            'email'       => new \Bozboz\Enquire\Forms\Fields\Email,
+            'dropdown'    => new \Bozboz\Enquire\Forms\Fields\Dropdown,
+            'recipient-dropdown' => new \Bozboz\Enquire\Forms\Fields\RecipientDropdown,
+            'checkboxes' => new Checkboxes,
+            'radios_buttons' => new Radios,
+        ]);
     }
 
     protected function viewComposers()

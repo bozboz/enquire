@@ -198,7 +198,7 @@ class Field extends Model implements Sortable
         return [
             in_array($this->input_type, Config::get('enquire.fields_with_options'))
                 ? new TextareaField('options', [
-                    'help_text' => 'Enter options a new line between each one'
+                    'help_text' => 'Enter options with a new line between each one'
                 ])
                 : null
         ];
