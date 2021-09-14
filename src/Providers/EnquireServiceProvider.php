@@ -71,7 +71,7 @@ class EnquireServiceProvider extends ServiceProvider
             'recipient-dropdown' => new \Bozboz\Enquire\Forms\Fields\RecipientDropdown,
             'text-label' => new \Bozboz\Enquire\Forms\Fields\TextLabel,
             'checkboxes' => new Checkboxes,
-            'radios_buttons' => new Radios,
+            'radio_buttons' => new Radios,
         ]);
     }
 
