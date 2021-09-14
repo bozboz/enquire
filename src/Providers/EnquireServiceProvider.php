@@ -69,7 +69,7 @@ class EnquireServiceProvider extends ServiceProvider
             'email'       => new \Bozboz\Enquire\Forms\Fields\Email,
             'dropdown'    => new \Bozboz\Enquire\Forms\Fields\Dropdown,
             'recipient-dropdown' => new \Bozboz\Enquire\Forms\Fields\RecipientDropdown,
-            'text-label' => new \App\Enquire\Forms\Fields\TextLabel,
+            'text-label' => new \Bozboz\Enquire\Forms\Fields\TextLabel,
             'checkboxes' => new Checkboxes,
             'radios_buttons' => new Radios,
         ]);
