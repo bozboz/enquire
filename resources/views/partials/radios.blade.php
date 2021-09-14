@@ -3,7 +3,7 @@
     @if ( ! $field->required)
         {{ Form::hidden($field->name, 'None chosen', ['id' => '']) }}
     @endif
-    @foreach (explode(PHP_EOL, $field->options) as $option)
+    @foreach ($field->getOptions() as $option)
         {{ Form::label(str_slug($field->name.$option), $option) }}
         {{ Form::radio($field->name, $option, null, ['id' => str_slug($field->name.$option)]) }}
     @endforeach

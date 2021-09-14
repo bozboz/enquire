@@ -1,6 +1,9 @@
 
 # Bozboz Forms Package Changelog
 
+## Version 3.2.2 (2021-09-14)
+- Fix checkboxes field required state
+
 ## Version 3.2.1 (2021-09-14)
 - Use field class for checkboxes field
 
